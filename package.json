@@ -1,19 +1,23 @@
 {
   "name": "microsoft-aiat-hackathon-ai-elderly-care",
   "version": "1.0.0",
-  "description": "",
+  "description": "AI-Driven Preventive Elderly Healthcare Monitoring System",
   "main": "index.js",
   "workspaces": [
     "apps/*"
   ],
   "scripts": {
+    "dev:backend": "npm run dev -w apps/backend",
+    "dev:admin": "npm run dev -w apps/admin-dashboard",
+    "dev:caregiver": "npm run dev -w apps/caregiver-dashboard",
+    "dev:elderly": "npm run dev -w apps/elderly-dashboard",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/SeanNachapat/microsoft-aiat-hackathon-ai-elderly-care.git"
   },
-  "keywords": [],
+  "keywords": ["azure", "healthcare", "elderly-care", "ai", "hackathon"],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
