@@ -1,23 +1,6 @@
-// ─── Alert Model ──────────────────────────────────────────────────────────────
+import { Alert, AlertSeverity, AlertStatus } from '@healthcare/core';
 
-export type AlertSeverity = 'critical' | 'warning' | 'info';
-export type AlertStatus = 'active' | 'acknowledged' | 'resolved';
-
-export interface Alert {
-  id: string;
-  patientId: string;
-  patientName: string;
-  title: string;
-  description: string;
-  severity: AlertSeverity;
-  status: AlertStatus;
-  triggeredAt: string;
-  acknowledgedAt?: string;
-  acknowledgedBy?: string;
-  resolvedAt?: string;
-  source: 'iot' | 'ai' | 'manual';
-  metadata?: Record<string, unknown>;
-}
+export { Alert, AlertSeverity, AlertStatus };
 
 export interface AcknowledgeAlertRequest {
   acknowledgedBy: string;

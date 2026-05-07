@@ -4,7 +4,8 @@
   "description": "AI-Driven Preventive Elderly Healthcare Monitoring System",
   "main": "index.js",
   "workspaces": [
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "scripts": {
     "dev:backend": "npm run dev -w apps/backend",
