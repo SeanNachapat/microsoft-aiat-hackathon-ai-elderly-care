@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
+
+:root {
+  /* Neutrals */
+  --cream: #FAF8F4;
+  --warm-white: #FFFDF9;
+  --sand: #F2EDE3;
+  --sand2: #E8E0D0;
+  --stone: #D4C9B5;
+  --bark: #8C7355;
+  --earth: #5C4A2E;
+  --deep: #2E2218;
+
+  /* Sage Green — Primary brand */
+  --sage: #4A7C59;
+  --sage-light: #EAF2EC;
+  --sage-mid: #C2DBC8;
+  --sage-dark: #2E5C3E;
+
+  /* Coral — Critical alerts */
+  --coral: #C85A3A;
+  --coral-light: #F9EDE8;
+  --coral-mid: #E8B5A2;
+
+  /* Amber — Warnings */
+  --amber: #B87820;
+  --amber-light: #FBF3E0;
+  --amber-mid: #E8C97A;
+
+  /* Sky Blue — Elderly dashboard only */
+  --sky: #3A6FA8;
+  --sky-light: #EAF1FA;
+  --sky-mid: #A8C5E8;
+
+  /* Semantic */
+  --text-primary: #2E2218;
+  --text-secondary: #6B5B45;
+  --text-muted: #9C8B75;
+  --border: #E8E0D0;
+  --border-light: #F0EAE0;
+
+  /* Spacing & Radius */
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --shadow: 0 2px 12px rgba(92,74,46,0.08);
+  --shadow-md: 0 4px 24px rgba(92,74,46,0.12);
+}
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background: var(--cream);
+  margin: 0;
+}
+
+h1, h2 {
+  font-family: 'DM Serif Display', serif;
+  color: var(--earth);
+  margin: 0;
+}
+
+h3, h4, h5, h6 {
+  font-family: 'Sarabun', sans-serif;
+  color: var(--earth);
+  margin: 0;
+  font-weight: 600;
+}
+
+/* Base Styles */
+.font-display {
+  font-family: 'DM Serif Display', serif;
+}
+
+.bilingual-label {
+  display: flex;
+  flex-direction: column;
+}
+
+.bilingual-label span:first-child {
+  font-weight: 600;
+}
+
+.bilingual-label span:last-child {
+  font-size: 0.85em;
+  opacity: 0.7;
+}

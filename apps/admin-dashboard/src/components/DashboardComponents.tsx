@@ -54,7 +54,7 @@ export const StatCard = ({ icon, label, value, subLabel, borderColor, iconBg, ic
     <div className="flex items-start justify-between h-full">
       <div className="flex flex-col gap-3">
         <div className={`w-10 h-10 ${iconBg} ${iconColor} rounded-lg flex items-center justify-center shadow-sm`}>
-          {React.cloneElement(icon as React.ReactElement, { size: 20 })}
+          {React.cloneElement(icon as React.ReactElement<any>, { size: 20 })}
         </div>
         <div>
           <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">{label}</p>
@@ -87,7 +87,7 @@ interface InfraCardProps {
 export const InfraCard = ({ icon, title, value, iconBg, iconColor }: InfraCardProps) => (
   <div className="flex items-center gap-2.5 p-3 bg-white/50 rounded-xl border border-gray-100/50 hover:bg-white transition-colors cursor-pointer group">
     <div className={`w-8 h-8 ${iconBg} ${iconColor} rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0`}>
-      {React.cloneElement(icon as React.ReactElement, { size: 16 })}
+      {React.cloneElement(icon as React.ReactElement<any>, { size: 16 })}
     </div>
     <div className="min-w-0">
       <h3 className="text-[11px] font-bold text-slate-800 truncate">{title}</h3>
