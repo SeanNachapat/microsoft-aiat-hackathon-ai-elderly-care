@@ -14,27 +14,27 @@ export const Sidebar = () => {
 
   const sections = [
     {
-      title: 'ภาพรวม · Overview',
+      title: 'Overview',
       items: [
-        { id: 'overview', icon: <LayoutDashboard />, labelTh: 'ภาพรวม Dashboard', labelEn: 'Overview Dashboard', path: '/' },
-        { id: 'patients', icon: <Users />, labelTh: 'ผู้ป่วย Patients', labelEn: 'Patient List', path: '/patients', badge: 12 },
-        { id: 'alerts', icon: <Bell />, labelTh: 'การแจ้งเตือน Alerts', labelEn: 'System Alerts', path: '/alerts', badge: 4 },
+        { id: 'overview', icon: <LayoutDashboard />, labelEn: 'Overview Dashboard', path: '/' },
+        { id: 'patients', icon: <Users />, labelEn: 'Patient List', path: '/patients', badge: 12 },
+        { id: 'alerts', icon: <Bell />, labelEn: 'System Alerts', path: '/alerts', badge: 4 },
       ]
     },
     {
-      title: 'ระบบ · System',
+      title: 'System',
       items: [
-        { id: 'infra', icon: <Zap />, labelTh: 'Infrastructure', labelEn: 'Cloud Status', path: '/infra' },
-        { id: 'pdpa', icon: <Lock />, labelTh: 'PDPA Compliance', labelEn: 'Data Privacy', path: '/pdpa' },
-        { id: 'ai', icon: <Activity />, labelTh: 'AI วิเคราะห์', labelEn: 'AI Analysis', path: '/ai' },
-        { id: 'settings', icon: <Settings />, labelTh: 'ตั้งค่า Settings', labelEn: 'Preferences', path: '/settings' },
+        { id: 'infra', icon: <Zap />, labelEn: 'Cloud Status', path: '/infra' },
+        { id: 'pdpa', icon: <Lock />, labelEn: 'Data Privacy', path: '/pdpa' },
+        { id: 'ai', icon: <Activity />, labelEn: 'AI Analysis', path: '/ai' },
+        { id: 'settings', icon: <Settings />, labelEn: 'Preferences', path: '/settings' },
       ]
     }
   ];
 
   return (
     <aside style={{
-      width: '220px',
+      width: '240px',
       height: '100vh',
       backgroundColor: 'var(--warm-white)',
       borderRight: '1.5px solid var(--border)',
@@ -56,15 +56,15 @@ export const Sidebar = () => {
           <div key={idx} style={{ marginBottom: '24px' }}>
             <p style={{ 
               fontSize: '10px', 
-              fontWeight: 700, 
-              color: 'var(--text-muted)', 
+              fontWeight: 800, 
+              color: 'var(--bark)', 
               textTransform: 'uppercase', 
-              letterSpacing: '0.08em',
-              padding: '12px 12px 4px'
+              letterSpacing: '0.1em',
+              padding: '12px 12px 8px'
             }}>
               {section.title}
             </p>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+            <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {section.items.map((item) => {
                 const isActive = pathname === item.path;
                 const isHovered = hoveredItem === item.id;
@@ -78,52 +78,46 @@ export const Sidebar = () => {
                       display: 'flex',
                       alignItems: 'center',
                       gap: '12px',
-                      padding: '10px 12px',
-                      borderRadius: 'var(--radius-sm)',
+                      height: '48px',
+                      padding: '0 16px',
+                      borderRadius: '16px',
                       cursor: 'pointer',
-                      backgroundColor: isActive ? 'var(--sage-light)' : isHovered ? 'rgba(0,0,0,0.02)' : 'transparent',
-                      color: isActive ? 'var(--sage-dark)' : 'var(--text-secondary)',
-                      fontWeight: isActive ? 600 : 500,
-                      transition: 'all 0.2s ease',
-                      borderLeft: isActive ? '2px solid var(--sage)' : '2px solid transparent',
-                      position: 'relative'
+                      backgroundColor: isActive ? 'var(--admin-accent-light)' : isHovered ? 'var(--sand)' : 'transparent',
+                      color: isActive ? 'var(--admin-accent)' : 'var(--bark)',
+                      fontWeight: isActive ? 800 : 500,
+                      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+                      position: 'relative',
                     }}
                   >
-                    {/* Icon Square Treatment */}
                     <div style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '8px',
-                      backgroundColor: isActive ? 'var(--sage-mid)' : 'var(--sage-light)',
+                      color: isActive ? 'var(--admin-accent)' : 'var(--bark)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      color: isActive ? 'var(--sage-dark)' : 'var(--sage)',
                       flexShrink: 0
                     }}>
-                      {React.cloneElement(item.icon as any, { size: 16 })}
+                      {React.cloneElement(item.icon as any, { size: 18 })}
                     </div>
                     
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', lineHeight: 1.1, minWidth: 0 }}>
-                      <span style={{ fontSize: '13px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.labelTh}</span>
+                      <span style={{ fontSize: '13.5px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.labelEn}</span>
                     </div>
 
                     {item.badge && !isHovered && !isActive && (
                       <span style={{
-                        backgroundColor: 'var(--coral-light)',
-                        color: 'var(--coral)',
-                        fontSize: '10px',
-                        fontWeight: 700,
-                        padding: '2px 6px',
+                        backgroundColor: 'var(--coral)',
+                        color: 'white',
+                        fontSize: '9px',
+                        fontWeight: 800,
+                        padding: '1px 6px',
                         borderRadius: '10px',
-                        marginLeft: '4px'
                       }}>
                         {item.badge}
                       </span>
                     )}
 
-                    {(isHovered || isActive) && (
-                      <ChevronRight size={12} style={{ color: 'var(--text-muted)', marginLeft: 'auto' }} />
+                    {isHovered && !isActive && (
+                      <ChevronRight size={14} style={{ opacity: 0.5 }} />
                     )}
                   </div>
                 );
@@ -163,21 +157,21 @@ export const Sidebar = () => {
               width: '40px', 
               height: '40px', 
               borderRadius: '50%', 
-              border: '2px solid var(--sage-mid)',
-              backgroundColor: 'var(--sage-light)',
+              border: '2px solid #1B4D3E',
+              backgroundColor: 'rgba(27, 77, 62, 0.1)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: 'var(--sage-dark)',
+              color: '#1B4D3E',
               fontSize: '14px',
-              fontWeight: 700
+              fontWeight: 800
             }}>
               AP
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
               <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--earth)' }}>Dr. Apinya</span>
-              <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500 }}>ผู้ดูแลระบบ · Admin</span>
+              <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontWeight: 500 }}>System Administrator</span>
             </div>
           </div>
         </div>

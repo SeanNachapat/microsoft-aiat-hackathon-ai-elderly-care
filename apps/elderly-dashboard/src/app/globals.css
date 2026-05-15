@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-forest: #1A3D34;
-  --color-sky: #0ea5e9;
-  --color-sky-light: #f0f9ff;
-  --color-sage: #4A7C59;
-  --color-sage-light: #f0fdf4;
+  --color-forest: #1B4D3E;
+  --color-sky: #3A6FA8;
+  --color-sky-light: #EAF1FA;
+  --color-sage: #8BA88E;
+  --color-sage-light: #ECFDF5;
   --color-coral: #C85A3A;
-  --color-coral-light: #fff7ed;
-  --color-amber: #d97706;
-  --color-amber-light: #fffbeb;
-  --color-sand: #f3f4f6;
-  --color-sand-light: #f9fafb;
+  --color-coral-light: #F9EDE8;
+  --color-amber: #B87820;
+  --color-amber-light: #FBF3E0;
+  --color-sand: #F8FAFB;
+  --color-sand-light: #FFFFFF;
 
   --animate-flow-down: flow-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -69,7 +69,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Sarabun', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   font-size: 16px;
   line-height: 1.5;

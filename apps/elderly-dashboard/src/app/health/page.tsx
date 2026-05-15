@@ -1,68 +1,105 @@
-import { Activity, Heart, Utensils, Footprints, Pill, ChevronRight, TrendingUp } from 'lucide-react';
+"use client";
+
+import React from 'react';
+import { Card, AppTypography, MOCK_DATA } from '@healthcare/core';
+import { Activity, Moon, Thermometer, ShieldCheck, Pill, ArrowUpRight } from 'lucide-react';
 import Link from 'next/link';
 
-export default function HealthPage() {
-  const categories = [
-    { id: 'vitals', th: 'ข้อมูลสุขภาพ', en: 'Vitals Monitoring', icon: <Activity size={22} />, path: '/health/vitals', color: 'bg-sky-light text-sky' },
-    { id: 'meals', th: 'โภชนาการ', en: 'Nutrition Log', icon: <Utensils size={22} />, path: '/health/meals', color: 'bg-forest/10 text-forest' },
-    { id: 'activity', th: 'กิจกรรม', en: 'Physical Activity', icon: <Footprints size={22} />, path: '/health/activity', color: 'bg-sage-light text-sage' },
-    { id: 'medicine', th: 'รายการยา', en: 'Medication Tracker', icon: <Pill size={22} />, path: '/health/medicine', color: 'bg-amber-light text-amber' },
-  ];
+export default function HealthSummaryPage() {
+  const patient = MOCK_DATA.primaryPatient;
+  const nextDose = patient.medications.find(m => m.status === 'pending') || patient.medications[0];
 
   return (
-    <div className="flex flex-col px-5 animate-fade-in">
-      {/* Overall Health Summary */}
-      <div className="bg-forest rounded-[32px] p-8 text-white mt-6 mb-8 shadow-xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 p-6 opacity-10 rotate-12">
-          <Heart size={140} />
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      
+      <header>
+        <AppTypography variant="h1" style={{ fontSize: '40px', fontWeight: 900, lineHeight: 1.1 }}>
+          Daily<br />Health
+        </AppTypography>
+      </header>
+
+      {/* Main Metrics Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        
+        <MetricCard 
+          icon={<Activity size={24} />} 
+          label="Activity" 
+          value={patient.sensors.motion} 
+          detail="Target Reached"
+          variant="dark"
+        />
+
+        <MetricCard 
+          icon={<Moon size={24} />} 
+          label="Sleep" 
+          value={patient.vitals.heartRate.toString()} 
+          detail="Avg BPM"
+        />
+
+        <MetricCard 
+          icon={<Thermometer size={24} />} 
+          label="Indoor" 
+          value={patient.sensors.roomTemp.toString()} 
+          detail="Temp °C"
+        />
+
+        <MetricCard 
+          icon={<ShieldCheck size={24} />} 
+          label="Safety" 
+          value="Safe" 
+          detail="No falls today"
+          color="var(--aec-success)"
+        />
+
+      </div>
+
+      {/* Medication Quick Access */}
+      <section>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+           <AppTypography variant="h2" style={{ fontSize: '20px', fontWeight: 800 }}>Medications</AppTypography>
+           <Link href="/health/medicine" style={{ textDecoration: 'none', color: 'var(--aec-green)', fontWeight: 700, fontSize: '14px' }}>View All</Link>
         </div>
         
-        <div className="relative z-10">
-          <span className="text-xs font-bold opacity-70 uppercase tracking-widest">ดัชนีสุขภาพโดยรวม</span>
-          <div className="flex items-center gap-3 mt-2">
-            <h2 className="text-5xl font-black tracking-tighter">ดีมาก</h2>
-            <div className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1.5">
-              <TrendingUp size={14} className="text-sage" />
-              <span className="text-xs font-bold">+5%</span>
+        <Link href="/health/medicine" style={{ textDecoration: 'none' }}>
+          <Card style={{ padding: '24px', borderRadius: '32px', backgroundColor: 'var(--aec-text)', color: 'white', display: 'flex', alignItems: 'center', gap: '20px' }}>
+            <div style={{ width: '56px', height: '56px', borderRadius: '16px', backgroundColor: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Pill size={28} color="white" />
             </div>
-          </div>
-          <p className="text-sm opacity-80 mt-4 max-w-[200px]">
-            คุณมีสุขภาพที่ยอดเยี่ยมในวันนี้! รักษามาตรฐานนี้ไว้นะครับ
-          </p>
-        </div>
-      </div>
-
-      <h3 className="text-base font-bold text-gray-700 mb-5">เลือกหัวข้อที่ต้องการดู (Select Category)</h3>
-
-      <div className="grid grid-cols-1 gap-4">
-        {categories.map((c, i) => (
-          <Link href={c.path} key={c.id} className="no-underline">
-            <div className="bg-white rounded-[24px] p-5 border border-gray-100 shadow-sm flex items-center justify-between hover:bg-gray-50 transition-all hover:scale-[1.02] active:scale-95">
-              <div className="flex items-center gap-4">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center ${c.color}`}>
-                  {c.icon}
-                </div>
-                <div className="flex flex-col">
-                  <h4 className="text-[17px] font-bold text-gray-800 leading-tight">{c.th}</h4>
-                  <span className="text-xs text-gray-400 mt-0.5">{c.en}</span>
-                </div>
-              </div>
-              <ChevronRight size={20} className="text-gray-300" />
+            <div style={{ flex: 1 }}>
+               <AppTypography variant="h2" style={{ color: 'white', fontSize: '18px', fontWeight: 800 }}>Next Dose</AppTypography>
+               <AppTypography variant="body" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '14px', fontWeight: 600 }}>{nextDose.time} · {nextDose.name}</AppTypography>
             </div>
-          </Link>
-        ))}
-      </div>
-
-      {/* Quick SOS Shortcut */}
-      <div className="mt-10 bg-coral-light rounded-[24px] p-6 border border-coral/10 flex items-center justify-between">
-        <div className="flex flex-col">
-          <h4 className="text-sm font-bold text-coral">ต้องการความช่วยเหลือ?</h4>
-          <p className="text-xs text-coral/80 mt-1">กดที่นี่เพื่อติดต่อเจ้าหน้าที่ดูแล</p>
-        </div>
-        <Link href="/sos" className="bg-coral text-white p-3 rounded-2xl shadow-lg shadow-coral/20">
-          <Activity size={24} />
+            <ArrowUpRight color="white" opacity={0.5} />
+          </Card>
         </Link>
-      </div>
+      </section>
+
     </div>
   );
 }
+
+const MetricCard = ({ icon, label, value, detail, variant, color }: any) => {
+  const isDark = variant === 'dark';
+  return (
+    <div style={{ 
+      padding: '24px', borderRadius: '32px', 
+      backgroundColor: isDark ? 'var(--aec-text)' : 'white',
+      border: isDark ? 'none' : '1px solid var(--aec-border)',
+      display: 'flex', flexDirection: 'column', gap: '16px'
+    }}>
+      <div style={{ 
+        width: '48px', height: '48px', borderRadius: '16px', 
+        backgroundColor: isDark ? 'rgba(255,255,255,0.1)' : 'var(--aec-bg)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        color: isDark ? 'white' : 'var(--aec-green)'
+      }}>
+        {icon}
+      </div>
+      <div>
+        <AppTypography variant="caps" style={{ color: isDark ? 'rgba(255,255,255,0.6)' : 'var(--aec-text-muted)', fontSize: '10px', fontWeight: 700 }}>{label}</AppTypography>
+        <AppTypography variant="h1" style={{ color: color || (isDark ? 'white' : 'var(--aec-text)'), fontSize: '24px', fontWeight: 900 }}>{value}</AppTypography>
+        <AppTypography variant="body" style={{ color: isDark ? 'rgba(255,255,255,0.4)' : 'var(--aec-text-muted)', fontSize: '11px', fontWeight: 600 }}>{detail}</AppTypography>
+      </div>
+    </div>
+  );
+};

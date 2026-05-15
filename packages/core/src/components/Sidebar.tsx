@@ -2,175 +2,138 @@
 
 import React, { useState } from 'react';
 import { 
-  LayoutDashboard, Users, Bell, Settings, ShieldCheck, Heart, Sparkles, 
-  ChevronRight, LogOut 
+  LayoutDashboard, Users, Bell, Settings, 
+  ChevronRight, LogOut, Hospital, TrendingUp, MessageSquare,
+  ShieldCheck, Activity
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { Logo } from './Logo';
+import Link from 'next/link';
 
 interface SidebarProps {
-  appName: string;
-  appLabelTh: string;
+  role: 'admin' | 'caregiver';
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ appName, appLabelTh }) => {
+export const Sidebar: React.FC<SidebarProps> = ({ role }) => {
   const pathname = usePathname();
   const [hoveredPath, setHoveredPath] = useState<string | null>(null);
 
-  const navItems = [
-    { icon: <LayoutDashboard size={18} />, labelTh: 'ภาพรวม', labelEn: 'Overview', path: '/' },
-    { icon: <Users size={18} />, labelTh: 'ผู้ป่วย', labelEn: 'Patients', path: '/patients' },
-    { icon: <Bell size={18} />, labelTh: 'การแจ้งเตือน', labelEn: 'Alerts', path: '/alerts', badge: 4 },
-    { icon: <Sparkles size={18} />, labelTh: 'AI วิเคราะห์', labelEn: 'AI Analysis', path: '/ai' },
-    { icon: <Settings size={18} />, labelTh: 'ตั้งค่า', labelEn: 'Settings', path: '/settings' },
+  const adminNav = [
+    { icon: <LayoutDashboard size={20} />, label: 'System Overview', path: '/' },
+    { icon: <Users size={20} />, label: 'User Management', path: '/users' },
+    { icon: <Activity size={20} />, label: 'Device Management', path: '/devices' },
+    { icon: <Bell size={20} />, label: 'Alert Center', path: '/alerts' },
+    { icon: <TrendingUp size={20} />, label: 'Analytics', path: '/analytics' },
+    { icon: <ShieldCheck size={20} />, label: 'Security', path: '/security' },
+    { icon: <Settings size={20} />, label: 'Configuration', path: '/settings' },
   ];
+
+  const caregiverNav = [
+    { icon: <LayoutDashboard size={20} />, label: 'Dashboard', path: '/' },
+    { icon: <Users size={20} />, label: 'My Patients', path: '/patients' },
+    { icon: <Bell size={20} />, label: 'Active Alerts', path: '/alerts', badge: 3 },
+    { icon: <Hospital size={20} />, label: 'Visit Schedule', path: '/schedule' },
+    { icon: <TrendingUp size={20} />, label: 'Reports', path: '/reports' },
+    { icon: <MessageSquare size={20} />, label: 'Messages', path: '/messages' },
+    { icon: <Settings size={20} />, label: 'Settings', path: '/settings' },
+  ];
+
+  const navItems = role === 'admin' ? adminNav : caregiverNav;
 
   return (
     <aside style={{
-      width: '240px',
+      width: '280px',
       height: '100vh',
-      backgroundColor: 'var(--warm-white)',
-      borderRight: '1.5px solid var(--border)',
+      backgroundColor: 'var(--aec-surface)',
+      borderRight: '1px solid var(--aec-border)',
       display: 'flex',
       flexDirection: 'column',
-      position: 'fixed',
-      left: 0,
+      position: 'sticky',
       top: 0,
-      zIndex: 10
-    }}>
-      {/* Brand Mark */}
-      <div style={{ padding: '16px 20px 24px', display: 'flex', alignItems: 'center' }}>
-        <Logo width={160} />
-      </div>
-
-      <div style={{ padding: '0 12px', flex: 1 }}>
-        <p style={{ 
-          fontSize: '10px', 
-          fontWeight: 700, 
-          color: 'var(--text-muted)', 
-          textTransform: 'uppercase', 
-          letterSpacing: '0.1em',
-          padding: '16px 8px 8px'
-        }}>
-          Main Navigation
-        </p>
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          {navItems.map((item) => {
-            const isActive = pathname === item.path;
-            const isHovered = hoveredPath === item.path;
-            
-            return (
-              <div 
-                key={item.path}
-                onMouseEnter={() => setHoveredPath(item.path)}
-                onMouseLeave={() => setHoveredPath(null)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  height: '44px',
-                  padding: '0 12px',
-                  borderRadius: 'var(--radius-sm)',
-                  cursor: 'pointer',
-                  backgroundColor: isActive ? 'var(--sage-light)' : isHovered ? 'var(--sand)' : 'transparent',
-                  color: isActive ? 'var(--sage-dark)' : 'var(--text-primary)',
-                  fontWeight: isActive ? 700 : 500,
-                  transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
-                  position: 'relative'
-                }}
-              >
-                {/* Icon Background */}
-                <div style={{
-                  width: '30px',
-                  height: '30px',
-                  borderRadius: '8px',
-                  backgroundColor: isActive ? 'var(--sage)' : 'var(--sage-light)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: isActive ? 'white' : 'var(--sage)',
-                  flexShrink: 0
-                }}>
-                  {item.icon}
-                </div>
-
-                <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1, flex: 1 }}>
-                  <span style={{ fontSize: '12.5px' }}>{item.labelTh}</span>
-                  <span style={{ fontSize: '9px', opacity: 0.6, fontWeight: 500 }}>{item.labelEn}</span>
-                </div>
-
-                {item.badge && !isHovered && (
-                  <span style={{
-                    backgroundColor: 'var(--coral)',
-                    color: 'white',
-                    fontSize: '9px',
-                    fontWeight: 700,
-                    padding: '1px 6px',
-                    borderRadius: '10px'
-                  }}>
-                    {item.badge}
-                  </span>
-                )}
-
-                {isHovered && !isActive && (
-                  <ChevronRight size={14} style={{ opacity: 0.5 }} />
-                )}
-              </div>
-            );
-          })}
-        </nav>
-      </div>
-
-      {/* User Section at Bottom */}
-      <div style={{ 
-        padding: '20px 16px', 
-        borderTop: '1.5px solid var(--border-light)',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '16px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ position: 'relative', cursor: 'pointer' }}>
-             <Bell size={20} color="var(--text-muted)" />
-             <div style={{
-               position: 'absolute',
-               top: '-2px',
-               right: '-2px',
-               width: '8px',
-               height: '8px',
-               backgroundColor: 'var(--coral)',
-               borderRadius: '50%',
-               border: '2px solid var(--warm-white)'
-             }} />
-          </div>
-          <LogOut size={18} color="var(--text-muted)" style={{ cursor: 'pointer' }} />
-        </div>
-
+      zIndex: 100
+    }} className="aec-shadow">
+      
+      {/* Brand Header with Actual Logo */}
+      <div style={{ padding: '32px 24px', display: 'flex', alignItems: 'center', gap: '16px' }}>
         <div style={{ 
-          display: 'flex',
-          alignItems: 'center',
-          gap: '12px'
+          width: '48px', height: '48px', borderRadius: '12px', 
+          backgroundColor: 'white', display: 'flex', 
+          alignItems: 'center', justifyContent: 'center',
+          boxShadow: '0 4px 15px rgba(0,0,0,0.05)', border: '1px solid var(--aec-border)'
         }}>
+          <img src="/logo.png" alt="AEC Logo" style={{ width: '32px' }} />
+        </div>
+        <div>
+          <span style={{ fontWeight: 900, fontSize: '18px', color: 'var(--aec-green)', display: 'block', letterSpacing: '-0.02em' }}>AEC Platform</span>
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--aec-text-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            {role} portal
+          </span>
+        </div>
+      </div>
+
+      <nav style={{ padding: '0 16px', flex: 1, display: 'flex', flexDirection: 'column', gap: '4px' }}>
+        {navItems.map((item) => {
+          const isActive = pathname === item.path;
+          const isHovered = hoveredPath === item.path;
+          
+          return (
+            <Link 
+              key={item.path}
+              href={item.path}
+              onMouseEnter={() => setHoveredPath(item.path)}
+              onMouseLeave={() => setHoveredPath(null)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '12px',
+                height: '52px',
+                padding: '0 16px',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                backgroundColor: isActive ? 'rgba(27, 77, 62, 0.05)' : isHovered ? 'var(--aec-bg)' : 'transparent',
+                color: isActive ? 'var(--aec-green)' : 'var(--aec-text-muted)',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <div style={{ color: isActive ? 'var(--aec-green)' : 'inherit' }}>
+                {item.icon}
+              </div>
+              <span style={{ fontSize: '14px', fontWeight: isActive ? 700 : 600, flex: 1 }}>
+                {item.label}
+              </span>
+              {item.badge && (
+                <span style={{ 
+                  backgroundColor: 'var(--aec-alert)', color: 'white', 
+                  fontSize: '10px', fontWeight: 800, padding: '2px 6px', borderRadius: '8px' 
+                }}>
+                  {item.badge}
+                </span>
+              )}
+              {isActive && <div style={{ width: '4px', height: '16px', backgroundColor: 'var(--aec-green)', borderRadius: '2px' }} />}
+            </Link>
+          );
+        })}
+      </nav>
+
+      {/* Footer / User Profile */}
+      <div style={{ padding: '24px', borderTop: '1px solid var(--aec-border)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <div style={{ 
-            width: '40px', 
-            height: '40px', 
-            borderRadius: '50%', 
-            border: '2px solid var(--sage-mid)',
-            backgroundColor: 'var(--sage-light)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--sage-dark)',
-            fontSize: '14px',
-            fontWeight: 700,
-            overflow: 'hidden'
+            width: '44px', height: '44px', borderRadius: '50%', 
+            backgroundColor: 'var(--aec-green)', color: 'white',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 800, fontSize: '14px'
           }}>
-            SN
+            {role === 'admin' ? 'AD' : 'CG'}
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--earth)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Sean N.</span>
-            <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 500 }}>Chief Nurse</span>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <span style={{ display: 'block', fontSize: '14px', fontWeight: 700, color: 'var(--aec-text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {role === 'admin' ? 'Admin User' : 'Caregiver User'}
+            </span>
+            <span style={{ display: 'block', fontSize: '11px', color: 'var(--aec-text-muted)', fontWeight: 600 }}>
+              {role === 'admin' ? 'System Master' : 'Assigned Facility A'}
+            </span>
           </div>
+          <LogOut size={18} color="var(--aec-text-muted)" style={{ cursor: 'pointer' }} />
         </div>
       </div>
     </aside>

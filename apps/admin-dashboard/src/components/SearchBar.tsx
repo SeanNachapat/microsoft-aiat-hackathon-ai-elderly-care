@@ -26,7 +26,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placehold
       <input 
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder || "ค้นหาผู้ป่วย · Search patients..."}
+        placeholder={placeholder || "Search patients..."}
         style={{
           flex: 1,
           border: 'none',
@@ -38,20 +38,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({ value, onChange, placehold
         }}
       />
       <button style={{
-        backgroundColor: 'var(--sage-light)',
-        color: 'var(--sage-dark)',
+        backgroundColor: 'rgba(27, 77, 62, 0.1)',
+        color: '#1B4D3E',
         borderRadius: '20px',
         fontSize: '12px',
         padding: '4px 14px',
         border: 'none',
-        fontWeight: 700,
+        fontWeight: 800,
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         height: '28px'
       }}>
-        กรอง · Filter
+        Filter
       </button>
     </div>
   );

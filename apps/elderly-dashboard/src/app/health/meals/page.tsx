@@ -10,12 +10,12 @@ export default function MealsPage() {
 
   return (
     <div className="flex flex-col px-5 pb-8">
-      <SubPageHeader titleTh="โภชนาการ" titleEn="Nutrition Log" />
+      <SubPageHeader titleEn="Nutrition Log" />
       
       {/* Daily Summary */}
       <div className="bg-forest rounded-[24px] p-6 text-white mb-6 flex justify-between items-center shadow-lg">
         <div className="flex flex-col">
-          <span className="text-xs opacity-70 uppercase tracking-widest font-bold">แคลอรี่วันนี้</span>
+          <span className="text-xs opacity-70 uppercase tracking-widest font-bold">Today's Calories</span>
           <div className="flex items-baseline gap-1 mt-1">
             <span className="text-3xl font-black">1,240</span>
             <span className="text-sm opacity-70">kcal</span>
@@ -26,24 +26,24 @@ export default function MealsPage() {
         </div>
       </div>
 
-      <h3 className="text-base font-bold text-gray-700 mb-4">ตารางอาหารวันนี้ (Today's Menu)</h3>
+      <h3 className="text-[18px] font-black text-gray-800 mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>Today's Menu</h3>
       
       <div className="flex flex-col gap-4">
         {meals.map((m, i) => (
           <div key={i} className="bg-white rounded-[24px] p-4 border border-gray-100 shadow-sm flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-100 flex-shrink-0">
                <img 
-                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${m.dish}&backgroundColor=1A3D34`} 
+                  src={`https://api.dicebear.com/7.x/initials/svg?seed=${m.dish}&backgroundColor=2D4239`} 
                   alt={m.dish}
                   className="w-full h-full object-cover"
                 />
             </div>
             <div className="flex-1 flex flex-col">
               <div className="flex justify-between items-start">
-                <span className="text-[10px] font-bold text-forest uppercase tracking-tighter">{m.th}</span>
+                <span className="text-[10px] font-bold text-forest uppercase tracking-tighter">{m.label}</span>
                 <span className="text-[10px] text-gray-400 font-medium">08:30 AM</span>
               </div>
-              <h4 className="text-[15px] font-bold text-gray-800 leading-tight mt-0.5">{m.dish}</h4>
+              <h4 className="text-[15px] font-black text-gray-800 leading-tight mt-0.5" style={{ fontFamily: "'Playfair Display', serif" }}>{m.dish}</h4>
               <p className="text-xs text-gray-500 mt-1 line-clamp-1">{m.note}</p>
             </div>
           </div>
@@ -51,12 +51,12 @@ export default function MealsPage() {
       </div>
 
       <div className="mt-8 bg-sky-light rounded-[24px] p-6 border border-sky/10">
-        <h4 className="text-sm font-bold text-sky mb-2 flex items-center gap-2">
+        <h4 className="text-sm font-bold text-sky mb-2 flex items-center gap-2" style={{ fontFamily: "'Playfair Display', serif" }}>
           <Coffee size={16} />
-          <span>คำแนะนำจากนักโภชนาการ</span>
+          <span>Nutritionist Advice</span>
         </h4>
         <p className="text-[13px] text-sky/80 leading-relaxed">
-          วันนี้ควรดื่มน้ำเพิ่มอีก 2 แก้ว และเลี่ยงอาหารที่มีโซเดียมสูงเพื่อรักษาระดับความดันโลหิตให้คงที่
+          Remember to drink 2 more glasses of water today and avoid high-sodium foods to help stabilize your blood pressure.
         </p>
       </div>
     </div>

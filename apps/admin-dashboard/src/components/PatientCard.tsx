@@ -35,7 +35,7 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient, onClick }) =>
         position: 'relative'
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = 'var(--sage-mid)';
+        e.currentTarget.style.borderColor = '#1B4D3E';
         e.currentTarget.style.boxShadow = 'var(--shadow-md)';
       }}
       onMouseLeave={(e) => {
@@ -60,8 +60,8 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient, onClick }) =>
           {/* Avatar bump to 36px */}
           <PatientAvatar name={patient.name} size="md" /> 
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-            <span style={{ fontSize: '13px', fontWeight: 700, color: 'var(--earth)' }}>{patient.name}</span>
-            <span style={{ fontSize: '9px', color: 'var(--text-muted)', fontWeight: 600 }}>
+            <span style={{ fontSize: '13px', fontWeight: 900, color: 'var(--earth)', fontFamily: "'Playfair Display', serif" }}>{patient.name}</span>
+            <span style={{ fontSize: '9px', color: 'var(--bark)', fontWeight: 600 }}>
               {patient.id} · {patient.age}y · {patient.location || patient.room}
             </span>
           </div>
@@ -71,7 +71,7 @@ export const PatientCard: React.FC<PatientCardProps> = ({ patient, onClick }) =>
 
       {/* Card Body - Vitals with sand background */}
       <div style={{ display: 'flex', gap: '8px' }}>
-        <div style={{ backgroundColor: '#F2EDE3', padding: '1px', borderRadius: '20px', display: 'flex', gap: '8px' }}>
+        <div style={{ backgroundColor: 'var(--sand)', padding: '4px', borderRadius: '12px', display: 'flex', gap: '8px' }}>
           <VitalPill label="HR" value={patient.hr} unit="bpm" status={patient.riskLevel} />
           <VitalPill label="BP" value={patient.bp} unit="mmHg" status={patient.riskLevel} />
           <VitalPill label="SpO2" value={patient.spo2} unit="%" status="normal" />

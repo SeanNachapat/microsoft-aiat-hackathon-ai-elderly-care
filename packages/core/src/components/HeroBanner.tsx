@@ -3,27 +3,23 @@
 import React from 'react';
 
 interface HeroBannerProps {
-  titleTh: string;
   titleEn: string;
-  subtitleTh: string;
   subtitleEn: string;
   color?: string;
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ 
-  titleTh, 
   titleEn, 
-  subtitleTh, 
   subtitleEn,
-  color = 'var(--sage-dark)'
+  color = 'var(--forest)'
 }) => {
   return (
     <div style={{
       width: '100%',
-      minHeight: '120px',
+      minHeight: '140px',
       backgroundColor: color,
-      borderRadius: '20px',
-      padding: '28px 32px',
+      borderRadius: '24px',
+      padding: '32px 40px',
       position: 'relative',
       overflow: 'hidden',
       display: 'flex',
@@ -31,7 +27,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
       justifyContent: 'center',
       color: 'white',
       marginBottom: '24px',
-      boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)'
+      boxShadow: '0 10px 30px -5px rgba(45, 66, 57, 0.3)'
     }}>
       {/* Decorative SVG Pattern */}
       <div style={{
@@ -40,7 +36,7 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
         top: '-40px',
         width: '240px',
         height: '240px',
-        opacity: 0.08,
+        opacity: 0.1,
         pointerEvents: 'none'
       }}>
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
@@ -54,21 +50,21 @@ export const HeroBanner: React.FC<HeroBannerProps> = ({
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <h1 style={{ 
-          fontFamily: "'DM Serif Display', serif", 
-          fontSize: '28px', 
+          fontFamily: "'Playfair Display', serif", 
+          fontSize: '32px', 
+          fontWeight: 900,
           margin: 0,
-          lineHeight: 1.2
+          lineHeight: 1.1
         }}>
-          {titleTh} · {titleEn}
+          {titleEn}
         </h1>
         <p style={{ 
-          fontFamily: "'Sarabun', sans-serif", 
-          fontSize: '13px', 
-          marginTop: '6px',
-          color: 'rgba(255, 255, 255, 0.75)',
+          fontSize: '14px', 
+          marginTop: '8px',
+          color: 'rgba(255, 255, 255, 0.8)',
           fontWeight: 400
         }}>
-          {subtitleTh} · {subtitleEn}
+          {subtitleEn}
         </p>
       </div>
     </div>

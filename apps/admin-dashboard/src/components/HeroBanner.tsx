@@ -1,75 +1,74 @@
 import React from 'react';
 
 interface HeroBannerProps {
-  titleTh: string;
   titleEn: string;
-  subtitleTh: string;
   subtitleEn: string;
 }
 
 export const HeroBanner: React.FC<HeroBannerProps> = ({ 
-  titleTh, titleEn, subtitleTh, subtitleEn 
+  titleEn, subtitleEn 
 }) => {
   return (
     <div style={{
-      backgroundColor: 'var(--sage-dark)',
-      borderRadius: '20px',
-      padding: '24px 32px',
-      minHeight: '130px',
+      backgroundColor: 'var(--admin-accent)',
+      borderRadius: '24px',
+      padding: '32px 40px',
+      minHeight: '140px',
       marginBottom: '24px',
       position: 'relative',
       overflow: 'hidden',
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      boxShadow: '0 10px 30px -5px rgba(27, 77, 62, 0.3)'
     }}>
-      {/* Decorative SVG Rings - Fixed rendering */}
-      <svg width="180" height="180" viewBox="0 0 180 180" style={{
+      {/* Decorative SVG Rings */}
+      <svg width="220" height="220" viewBox="0 0 220 220" style={{
         position: 'absolute',
-        right: '-20px',
-        top: '-20px',
-        opacity: 0.08,
+        right: '-30px',
+        top: '-30px',
+        opacity: 0.1,
         zIndex: 0
       }}>
-        <circle cx="150" cy="30" r="80" fill="none" stroke="white" strokeWidth="1"/>
-        <circle cx="150" cy="30" r="110" fill="none" stroke="white" strokeWidth="1"/>
-        <circle cx="150" cy="30" r="140" fill="none" stroke="white" strokeWidth="1"/>
+        <circle cx="180" cy="40" r="100" fill="none" stroke="white" strokeWidth="1"/>
+        <circle cx="180" cy="40" r="130" fill="none" stroke="white" strokeWidth="1"/>
+        <circle cx="180" cy="40" r="160" fill="none" stroke="white" strokeWidth="1"/>
       </svg>
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{
           display: 'inline-flex',
-          padding: '4px 10px',
+          padding: '4px 12px',
           backgroundColor: 'rgba(255,255,255,0.15)',
           borderRadius: '20px',
           color: 'white',
           fontSize: '10px',
-          fontWeight: 700,
-          letterSpacing: '0.08em',
+          fontWeight: 800,
+          letterSpacing: '0.1em',
           textTransform: 'uppercase',
-          marginBottom: '8px'
+          marginBottom: '10px'
         }}>
-          ADMIN · ผู้ดูแลระบบ
+          ADMINISTRATOR
         </div>
         
         <h1 style={{
-          fontFamily: "'DM Serif Display', serif",
-          fontSize: '26px',
+          fontSize: '32px',
+          fontWeight: 800,
           color: 'white',
-          margin: '0 0 2px 0',
-          lineHeight: 1.2
+          margin: '0 0 4px 0',
+          lineHeight: 1.1,
+          letterSpacing: '-0.03em'
         }}>
-          {titleEn} · {titleTh}
+          {titleEn}
         </h1>
         
         <p style={{
-          fontSize: '13px',
-          color: 'white',
-          opacity: 0.7,
+          fontSize: '14px',
+          color: 'rgba(255,255,255,0.8)',
           margin: 0,
-          fontWeight: 500
+          fontWeight: 400
         }}>
-          {subtitleTh} · {subtitleEn}
+          {subtitleEn}
         </p>
       </div>
     </div>

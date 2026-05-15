@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import "@healthcare/core/styles/tokens.css";
 import "./globals.css";
-import { Sidebar } from "../components/Sidebar";
+import { Sidebar } from "@healthcare/core";
 
 export const metadata: Metadata = {
-  title: "AEC Admin · ผู้ดูแลระบบ",
+  title: "AEC Admin · Strategic Hub",
   description: "AI Elderly Care Monitoring System",
 };
 
@@ -14,13 +14,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" suppressHydrationWarning>
-      <body className="antialiased" style={{ backgroundColor: 'var(--cream)', margin: 0 }}>
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-          <Sidebar />
-          <div style={{ flex: 1, marginLeft: '220px' }}>
+    <html lang="en">
+      <body className="antialiased theme-admin">
+        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--aec-bg)' }}>
+          <Sidebar role="admin" />
+          <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
             {children}
-          </div>
+          </main>
         </div>
       </body>
     </html>

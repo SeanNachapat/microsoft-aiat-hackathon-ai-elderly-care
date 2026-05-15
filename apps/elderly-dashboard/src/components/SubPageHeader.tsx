@@ -5,11 +5,10 @@ import { ChevronLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface SubPageHeaderProps {
-  titleTh: string;
   titleEn: string;
 }
 
-export const SubPageHeader: React.FC<SubPageHeaderProps> = ({ titleTh, titleEn }) => {
+export const SubPageHeader: React.FC<SubPageHeaderProps> = ({ titleEn }) => {
   const router = useRouter();
 
   return (
@@ -21,8 +20,7 @@ export const SubPageHeader: React.FC<SubPageHeaderProps> = ({ titleTh, titleEn }
         <ChevronLeft size={24} className="text-forest" />
       </button>
       <div className="flex flex-col">
-        <h2 className="text-xl font-bold text-gray-800 leading-tight">{titleTh}</h2>
-        <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">{titleEn}</span>
+        <h2 className="text-2xl font-black text-gray-800 leading-tight" style={{ fontFamily: "'Playfair Display', serif" }}>{titleEn}</h2>
       </div>
     </div>
   );

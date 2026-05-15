@@ -36,8 +36,8 @@ export const SOSButton = () => {
     >
       <AlertTriangle size={24} color="white" />
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', textAlign: 'left' }}>
-        <span style={{ fontSize: '17px', fontWeight: 700 }}>🆘 ขอความช่วยเหลือด่วน</span>
-        <span style={{ fontSize: '14px', fontWeight: 400, opacity: 0.9 }}>Request Emergency Help</span>
+        <span style={{ fontSize: '17px', fontWeight: 700 }}>🆘 Emergency SOS</span>
+        <span style={{ fontSize: '14px', fontWeight: 400, opacity: 0.9 }}>Request immediate help</span>
       </div>
     </button>
   );

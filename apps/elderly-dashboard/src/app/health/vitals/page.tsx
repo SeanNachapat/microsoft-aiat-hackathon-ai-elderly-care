@@ -9,41 +9,40 @@ export default function VitalsPage() {
   const { metrics } = useHealthMetrics();
 
   const iconMap: Record<string, React.ReactNode> = {
-    'ชีพจร': <Heart size={24} />,
-    'ความดัน': <Activity size={24} />,
-    'ออกซิเจน': <Wind size={24} />,
-    'อุณหภูมิ': <Thermometer size={24} />,
+    'Heart Rate': <Heart size={24} />,
+    'Blood Pressure': <Activity size={24} />,
+    'SpO2': <Wind size={24} />,
+    'Temperature': <Thermometer size={24} />,
   };
 
   const colorMap: Record<string, string> = {
-    'ชีพจร': 'bg-coral-light text-coral',
-    'ความดัน': 'bg-sky-light text-sky',
-    'ออกซิเจน': 'bg-sage-light text-sage',
-    'อุณหภูมิ': 'bg-amber-light text-amber',
+    'Heart Rate': 'bg-coral-light text-coral',
+    'Blood Pressure': 'bg-sky-light text-sky',
+    'SpO2': 'bg-sage-light text-sage',
+    'Temperature': 'bg-amber-light text-amber',
   };
 
   return (
     <div className="flex flex-col px-5 pb-8">
-      <SubPageHeader titleTh="ข้อมูลสุขภาพ" titleEn="Vitals Monitoring" />
+      <SubPageHeader titleEn="Vitals Monitoring" />
       
       <div className="flex flex-col gap-4">
         {metrics.map((m, i) => (
           <div key={i} className="bg-white rounded-[24px] p-6 border border-gray-100 shadow-sm flex flex-col gap-4">
             <div className="flex justify-between items-start">
               <div className="flex items-center gap-4">
-                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorMap[m.th] || 'bg-gray-100 text-gray-400'}`}>
-                  {iconMap[m.th] || <Activity size={24} />}
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center ${colorMap[m.label] || 'bg-gray-100 text-gray-400'}`}>
+                  {iconMap[m.label] || <Activity size={24} />}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-medium text-gray-500">{m.en}</span>
-                  <h3 className="text-xl font-bold text-gray-800">{m.th}</h3>
+                  <h3 className="text-xl font-black text-gray-800" style={{ fontFamily: "'Playfair Display', serif" }}>{m.label}</h3>
                 </div>
               </div>
               <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
                 m.statusType === 'critical' ? 'bg-coral-light text-coral' : 
                 m.statusType === 'warning' ? 'bg-amber-light text-amber' : 'bg-sage-light text-sage'
               }`}>
-                {m.statusTh}
+                {m.status}
               </div>
             </div>
 
@@ -55,7 +54,7 @@ export default function VitalsPage() {
               
               <div className="flex items-center gap-2 text-sage text-xs font-bold">
                 <TrendingUp size={14} />
-                <span>ปกติในช่วง 7 วัน</span>
+                <span>Normal for 7 days</span>
               </div>
             </div>
 

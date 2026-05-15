@@ -21,10 +21,10 @@ export const AlertFeed: React.FC<AlertFeedProps> = ({ alerts }) => {
       height: 'fit-content'
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-        <h3 style={{ fontSize: '14px', fontWeight: 600, color: 'var(--earth)', margin: 0 }}>
-          เหตุการณ์ล่าสุด · Recent Alerts
+        <h3 style={{ fontSize: '16px', fontWeight: 900, color: 'var(--earth)', margin: 0, fontFamily: "'Playfair Display', serif" }}>
+          Recent Alerts
         </h3>
-        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>08:30 น.</span>
+        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>08:30 AM</span>
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column' }}>

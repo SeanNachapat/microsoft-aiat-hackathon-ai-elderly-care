@@ -45,7 +45,7 @@ export const AsuriaChatCard: React.FC<AsuriaChatCardProps> = ({
           borderRadius: '50%',
           backgroundColor: 'var(--sage)',
         }} />
-        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>Asuria AI · ผู้ช่วย AI</span>
+        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>Asuria AI · Assistant</span>
       </div>
 
       {/* Chat Area */}
@@ -67,8 +67,7 @@ export const AsuriaChatCard: React.FC<AsuriaChatCardProps> = ({
             color: msg.role === 'ai' ? 'var(--sky)' : 'var(--text-primary)',
             alignSelf: msg.role === 'ai' ? 'flex-start' : 'flex-end',
           }}>
-            <p style={{ margin: 0 }}>{msg.th}</p>
-            {msg.en && <p style={{ margin: '4px 0 0', fontSize: '14px', opacity: 0.8 }}>{msg.en}</p>}
+            <p style={{ margin: 0 }}>{msg.en}</p>
           </div>
         ))}
       </div>
@@ -118,7 +117,7 @@ export const AsuriaChatCard: React.FC<AsuriaChatCardProps> = ({
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="พูดหรือพิมพ์เพื่อคุยกับ AI..."
+          placeholder="Talk or type to chat with AI..."
           style={{
             flex: 1,
             borderRadius: '20px',

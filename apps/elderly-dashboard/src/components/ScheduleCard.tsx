@@ -28,7 +28,7 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({ tasks, onToggleTask 
         gap: '8px'
       }}>
         <Clipboard size={18} color="var(--sage)" />
-        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sage-dark)' }}>📋 กิจวัตรวันนี้ · Daily Schedule</span>
+        <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--sage-dark)' }}>📋 Daily Schedule</span>
       </div>
 
       {/* Task List */}
@@ -67,13 +67,12 @@ export const ScheduleCard: React.FC<ScheduleCardProps> = ({ tasks, onToggleTask 
             <div style={{ flex: 1, display: 'flex', flexDirection: 'column', lineHeight: 1.2 }}>
               <span style={{ 
                 fontSize: '14px', 
-                fontWeight: 500, 
+                fontWeight: 600, 
                 color: task.done ? 'var(--text-muted)' : 'var(--text-primary)',
                 textDecoration: task.done ? 'line-through' : 'none',
               }}>
-                {task.th}
+                {task.label}
               </span>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{task.en}</span>
             </div>
 
             {/* Time */}
