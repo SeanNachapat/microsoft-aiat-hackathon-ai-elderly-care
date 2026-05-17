@@ -91,9 +91,9 @@ io.on('connection', (socket) => {
     });
 
     // Only analyze elder speech (not AI responses)
-    if (data.speaker === 'elder' && env.GOOGLE_AI_API_KEY) {
+    if (data.speaker === 'elder') {
       try {
-        const analysis = await analyzeTurn(data.text, env.GOOGLE_AI_API_KEY);
+        const analysis = await analyzeTurn(data.text);
         // Push analysis to caregiver panel
         io.to('caregiver-panel').emit('analysis:new', analysis);
         // Evaluate and auto-trigger actions

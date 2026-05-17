@@ -6,6 +6,9 @@ import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 import { analyzeTurn } from './analyzeTurn';
 import { evaluateActions } from './alertRouter';
 import crypto from 'crypto';
+import { getNurseJiraConfig } from '../config/nurseJira.config.selector';
+import elderInfo from '../../../elderly-dashboard/src/data/elderInfo.json';
+import { ElderProfile } from '../types/nurseJira.types';
 
 export class AzureRealtimeService {
   private ws: WebSocket | null = null;
@@ -17,8 +20,13 @@ export class AzureRealtimeService {
     }
   }
 
-  async startSession(socket: Socket, systemInstruction: string) {
+  async startSession(socket: Socket, _systemInstruction?: string) {
     try {
+      const lang = (process.env.NURSE_JIRA_LANG as 'en' | 'th') ?? 'th';
+      const config = getNurseJiraConfig(lang);
+      const profile = elderInfo as unknown as ElderProfile;
+      const finalInstruction = config.buildPrompt(profile);
+      logger.info(`📝 System prompt built (lang=${lang}, length=${finalInstruction.length} chars)`);
       const url = new URL(env.AZURE_OPENAI_ENDPOINT!);
       const wsUrl = `wss://${url.hostname}/openai/realtime?api-version=2024-10-01-preview&deployment=${env.AZURE_OPENAI_DEPLOYMENT}`;
       
@@ -37,17 +45,18 @@ export class AzureRealtimeService {
           type: "session.update",
           session: {
             modalities: ["text"],
-            instructions: systemInstruction,
-            temperature: 0.7,
-            max_response_output_tokens: 150,
+            instructions: finalInstruction,
+            temperature: config.temperature,
+            max_response_output_tokens: config.maxResponseTokens,
             turn_detection: {
               type: "server_vad",
-              threshold: 0.35,
-              prefix_padding_ms: 400,
-              silence_duration_ms: 900
+              threshold: config.vadThreshold,
+              prefix_padding_ms: config.prefixPaddingMs,
+              silence_duration_ms: config.silenceDurationMs
             },
             input_audio_transcription: {
-              model: "whisper-1"
+              model: "whisper-1", // Using whisper-1 as it supports multiple languages, or 'gpt-4o-transcribe' based on snippet
+              language: config.transcriptionLanguage
             }
           }
         };
@@ -81,6 +90,14 @@ export class AzureRealtimeService {
 
   private handleAzureMessage(message: any, socket: Socket) {
     switch (message.type) {
+      case 'session.created':
+        logger.info(`✅ [${socket.id}] Azure Realtime session created successfully`);
+        break;
+
+      case 'session.updated':
+        logger.info(`✅ [${socket.id}] Azure Realtime session config applied`);
+        break;
+
       case 'input_audio_buffer.speech_started':
         this.currentTurnText = "";
         socket.emit("voice:interrupted");
@@ -89,7 +106,7 @@ export class AzureRealtimeService {
       case 'conversation.item.input_audio_transcription.completed':
         const transcript = message.transcript?.trim();
         if (transcript) {
-          logger.info(`🗣️ [Whisper] Elder transcript: "${transcript}"`);
+          logger.info(`🗣️ [Whisper→Model] Elder said: "${transcript}"`);
           
           // 1. Push elder transcript to caregiver panel
           socket.server.to('caregiver-panel').emit('transcript:new', {
@@ -113,6 +130,7 @@ export class AzureRealtimeService {
       case 'response.done':
         if (this.currentTurnText.trim().length > 0) {
           const aiText = this.currentTurnText.trim();
+          logger.info(`🤖 [Model→TTS] Nurse Jira: "${aiText}"`);
           
           // 1. Push AI transcript to caregiver panel
           socket.server.to('caregiver-panel').emit('transcript:new', {
@@ -136,15 +154,11 @@ export class AzureRealtimeService {
   }
 
   private async runTurnAnalysis(transcript: string, socket: Socket) {
-    const hasGoogleKey = env.GOOGLE_AI_API_KEY && env.GOOGLE_AI_API_KEY !== 'your-google-ai-key-here';
-    
     let analysis;
-    if (hasGoogleKey) {
-      try {
-        analysis = await analyzeTurn(transcript, env.GOOGLE_AI_API_KEY!);
-      } catch (err) {
-        logger.error(`Gemini turn analysis failed: ${err}`);
-      }
+    try {
+      analysis = await analyzeTurn(transcript);
+    } catch (err) {
+      logger.error(`Turn analysis failed: ${err}`);
     }
 
     // Bulletproof Fallback: Rule-based analysis if Gemini key is missing/failed (Ensures SOS triggers instantly for Hackathon demo!)
@@ -231,11 +245,15 @@ export class AzureRealtimeService {
       return;
     }
 
+    const lang = (process.env.NURSE_JIRA_LANG as 'en' | 'th') ?? 'th';
+    const config = getNurseJiraConfig(lang);
+
     const speechConfig = sdk.SpeechConfig.fromSubscription(
       env.AZURE_SPEECH_KEY,
       env.AZURE_SPEECH_REGION
     );
 
+    speechConfig.speechSynthesisVoiceName = config.speechVoice;
     speechConfig.speechSynthesisOutputFormat =
       sdk.SpeechSynthesisOutputFormat.Raw24Khz16BitMonoPcm;
 
@@ -244,9 +262,9 @@ export class AzureRealtimeService {
     const safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     const ssml = `
-      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
-        <voice name="en-US-JennyNeural">
-          <prosody rate="-15%" pitch="-5%">
+      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${config.ssmlLang}">
+        <voice name="${config.speechVoice}">
+          <prosody rate="${config.prosodyRate}" pitch="${config.prosodyPitch}">
             ${safeText}
           </prosody>
         </voice>
