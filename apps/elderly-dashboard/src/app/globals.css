@@ -1,9 +1,64 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-primary-blue: #0047AB;
-  --color-accent-green: #10b981;
-  --color-accent-orange: #f59e0b;
+  --color-forest: #1B4D3E;
+  --color-sky: #3A6FA8;
+  --color-sky-light: #EAF1FA;
+  --color-sage: #8BA88E;
+  --color-sage-light: #ECFDF5;
+  --color-coral: #C85A3A;
+  --color-coral-light: #F9EDE8;
+  --color-amber: #B87820;
+  --color-amber-light: #FBF3E0;
+  --color-sand: #F8FAFB;
+  --color-sand-light: #FFFFFF;
+
+  --animate-flow-down: flow-down 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in-up: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-slide-up: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fade-in 0.6s ease-out forwards;
+
+  @keyframes flow-down {
+    from {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in-up {
+    from {
+      transform: translateY(20px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
 
 :root {
@@ -14,8 +69,10 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: 'Inter', 'Sarabun', system-ui, sans-serif;
+  font-family: 'Outfit', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
+  font-size: 16px;
+  line-height: 1.5;
 }
 
 .elder-nav {

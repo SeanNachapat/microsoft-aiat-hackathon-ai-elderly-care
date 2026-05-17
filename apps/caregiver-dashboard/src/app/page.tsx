@@ -1,125 +1,135 @@
 "use client";
 
-import { useState, useEffect } from 'react';
-import { Shield, Bell, Sparkles, Mic, Send } from 'lucide-react';
-import { Patient } from '@healthcare/core';
-import { MetricCard } from '@/components/MetricCard';
-import { PatientListItem } from '@/components/PatientListItem';
-import { AIChatBox } from '@/components/AIChatBox';
-import { ApiService } from '@/services/api';
-import { MOCK_PATIENTS } from '@/services/mockData';
+import React from 'react';
+import { Card, Button, StatusBadge, AppTypography, PatientAvatar, MOCK_DATA } from '@healthcare/core';
+import { Search, AlertCircle, TrendingUp, MoreVertical } from 'lucide-react';
 
 export default function CaregiverDashboard() {
-  const [patients, setPatients] = useState<Patient[]>(MOCK_PATIENTS);
-  const [selectedId, setSelectedId] = useState('PT-005');
-  const [chatMsg, setChatMsg] = useState('');
-  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai', text: string }[]>([
-    { role: 'ai', text: 'สวัสดีค่ะ ฉันคืออาซูเรีย AI ผู้ช่วยพยาบาล พร้อมดูแลผู้ป่วยร่วมกับคุณค่ะ 💙' }
-  ]);
-
-  const patient = patients.find(p => p.id === selectedId) || patients[0];
-
-  useEffect(() => {
-    // ApiService.getPatients().then(setPatients);
-  }, []);
-
-  const handleSendChat = () => {
-    if (!chatMsg.trim()) return;
-    setChatHistory(prev => [...prev, { role: 'user', text: chatMsg }]);
-    // Simulate AI response
-    setTimeout(() => {
-      setChatHistory(prev => [...prev, { role: 'ai', text: `รับทราบค่ะ สำหรับ ${patient.name} แนะนำให้เฝ้าระวังอาการเพิ่มเติมนะคะ` }]);
-    }, 1000);
-    setChatMsg('');
-  };
+  const patients = MOCK_DATA.allPatients;
+  const alerts = MOCK_DATA.alerts;
+  const system = MOCK_DATA.systemHealth;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans p-6 gap-6">
-      {/* Header */}
-      <header className="flex justify-between items-center">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
-            <Shield fill="currentColor" size={22} />
-          </div>
-          <div>
-            <h1 className="text-2xl font-black text-slate-800 tracking-tight">Azure AI Care <span className="text-blue-600">Pro</span></h1>
-            <p className="text-[10px] font-bold text-slate-400">ระบบวิเคราะห์สุขภาพอัจฉริยะ</p>
-          </div>
+    <div className="caregiver-dashboard" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+      
+      {/* Top Action Bar */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div>
+          <AppTypography variant="h1" style={{ color: 'var(--aec-green)' }}>
+            Patient Monitoring
+          </AppTypography>
+          <AppTypography variant="body" style={{ opacity: 0.6 }}>
+            Viewing {patients.length} active seniors in Facility A
+          </AppTypography>
         </div>
-        <div className="flex items-center gap-2 bg-white border border-slate-100 px-4 py-2 rounded-full shadow-sm">
-          <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-          <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Active</span>
+        <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ position: 'relative' }}>
+            <Search style={{ position: 'absolute', left: '12px', top: '12px', opacity: 0.4 }} size={20} />
+            <input 
+              type="text" 
+              placeholder="Search patients..." 
+              style={{ 
+                padding: '12px 12px 12px 40px', borderRadius: 'var(--radius)', 
+                border: '1px solid var(--aec-border)', background: 'var(--aec-surface)',
+                outline: 'none', width: '300px'
+              }} 
+            />
+          </div>
+          <Button variant="primary" size="md">
+            + New Assessment
+          </Button>
         </div>
-      </header>
+      </div>
 
-      <div className="grid grid-cols-12 gap-6 flex-1">
-        {/* Sidebar */}
-        <aside className="col-span-3 space-y-4">
-          <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest px-1">ผู้ป่วยในการดูแล</h3>
-          <div className="space-y-2">
-            {patients.map(p => (
-              <PatientListItem 
-                key={p.id} 
-                patient={p} 
-                isSelected={selectedId === p.id} 
-                onClick={() => setSelectedId(p.id)} 
-              />
-            ))}
-          </div>
-        </aside>
+      {/* Main Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px' }}>
+        
+        {/* Patient Grid */}
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+           {patients.map((p) => (
+             <PatientMonitorCard key={p.id} name={p.name} status={p.status} hr={p.hr} o2={p.o2} lastActive="5m ago" />
+           ))}
+        </div>
 
-        {/* Main Content */}
-        <main className="col-span-6 space-y-5">
-          <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-100">
-            <div className="flex justify-between items-start mb-5">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 bg-amber-50 rounded-2xl flex items-center justify-center text-3xl">{patient.avatar || '👴'}</div>
-                <div>
-                  <h2 className="text-2xl font-black text-slate-800">{patient.name}</h2>
-                  <p className="text-xs font-bold text-slate-400">{patient.location} • อายุ {patient.age} ปี</p>
-                </div>
-              </div>
-              <span className={`text-xs font-black px-4 py-2 rounded-full border bg-blue-50 text-blue-600`}>
-                Risk: {patient.risk}/100
-              </span>
+        {/* Right Sidebar: Active Alerts */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+          <Card style={{ padding: '24px' }}>
+            <AppTypography variant="h2" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <AlertCircle color="var(--aec-alert)" /> Active Alerts
+            </AppTypography>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+               {alerts.map((a) => (
+                 <AlertItem key={a.id} name={a.patientName} alert={a.type} time={a.time} />
+               ))}
             </div>
-            
-            <div className="grid grid-cols-4 gap-3">
-              <MetricCard label="HEART RATE" value={patient.hr} unit="BPM" color="text-red-500" />
-              <MetricCard label="BLOOD PRESSURE" value={patient.bp} unit="mmHg" color="text-blue-600" />
-              <MetricCard label="SpO2" value={`${patient.spo2}%`} color="text-emerald-500" />
-              <MetricCard label="TEMP" value={patient.detail?.vitals.temp || '--'} unit="°C" color="text-amber-500" />
-            </div>
-          </div>
+          </Card>
 
-          <AIChatBox 
-            history={chatHistory}
-            msg={chatMsg}
-            onMsgChange={setChatMsg}
-            onSend={handleSendChat}
-          />
-        </main>
-
-        {/* Right Sidebar */}
-        <aside className="col-span-3 space-y-4">
-          <div className="bg-blue-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-500/20">
-            <h3 className="text-lg font-black mb-4">AI Audit Summary</h3>
-            <p className="text-xs leading-relaxed text-blue-50 mb-4">
-              {patient.detail?.vitals.alert || 'สถานะปัจจุบันปกติ แนะนำให้ติดตามตามรอบเวลา'}
-            </p>
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-xs font-bold">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
-                <span>ยาเช้า: รับประทานแล้ว</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs font-bold">
-                <div className="w-2 h-2 bg-emerald-400 rounded-full" />
-                <span>การเคลื่อนไหว: ปกติ</span>
-              </div>
+          <Card style={{ padding: '24px' }}>
+            <AppTypography variant="h2" style={{ marginBottom: '20px' }}>
+              System Health
+            </AppTypography>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <AppTypography variant="caps">Network</AppTypography>
+              <StatusBadge status={system.network as any} />
             </div>
-          </div>
-        </aside>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <AppTypography variant="caps">AI Models</AppTypography>
+              <StatusBadge status={system.aiModels as any} />
+            </div>
+          </Card>
+        </div>
+
       </div>
     </div>
   );
 }
+
+const PatientMonitorCard = ({ name, status, hr, o2, lastActive }: any) => (
+  <Card style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+        <PatientAvatar name={name} size="md" />
+        <div>
+          <AppTypography variant="h2" style={{ fontSize: '18px' }}>{name}</AppTypography>
+          <AppTypography variant="caps" style={{ fontSize: '10px' }}>Last: {lastActive}</AppTypography>
+        </div>
+      </div>
+      <StatusBadge status={status} />
+    </div>
+
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+      <div style={{ background: 'var(--aec-bg)', padding: '12px', borderRadius: 'var(--radius-sm)' }}>
+        <AppTypography variant="caps" style={{ fontSize: '9px' }}>Heart Rate</AppTypography>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+          <AppTypography variant="h2" style={{ fontSize: '20px', color: status === 'critical' ? 'var(--aec-alert)' : 'inherit' }}>{hr}</AppTypography>
+          <AppTypography variant="caps" style={{ fontSize: '10px' }}>BPM</AppTypography>
+        </div>
+      </div>
+      <div style={{ background: 'var(--aec-bg)', padding: '12px', borderRadius: 'var(--radius-sm)' }}>
+        <AppTypography variant="caps" style={{ fontSize: '9px' }}>SpO2</AppTypography>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+          <AppTypography variant="h2" style={{ fontSize: '20px' }}>{o2}</AppTypography>
+          <AppTypography variant="caps" style={{ fontSize: '10px' }}>%</AppTypography>
+        </div>
+      </div>
+    </div>
+
+    <Button variant="secondary" size="sm" style={{ width: '100%', justifyContent: 'space-between' }}>
+      View Full Profile <ChevronRight size={16} />
+    </Button>
+  </Card>
+);
+
+const AlertItem = ({ name, alert, time }: any) => (
+  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(217, 64, 64, 0.05)', borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--aec-alert)' }}>
+    <div>
+      <AppTypography variant="h2" style={{ fontSize: '14px' }}>{name}</AppTypography>
+      <AppTypography variant="body" style={{ fontSize: '12px', opacity: 0.7 }}>{alert}</AppTypography>
+    </div>
+    <AppTypography variant="caps" style={{ fontSize: '10px' }}>{time}</AppTypography>
+  </div>
+);
+
+const ChevronRight = ({ size }: { size: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+);

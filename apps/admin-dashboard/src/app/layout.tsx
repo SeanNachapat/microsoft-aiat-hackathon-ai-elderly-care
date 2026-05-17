@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import "@healthcare/core/styles/tokens.css";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import { Sidebar } from "@healthcare/core";
 
 export const metadata: Metadata = {
-  title: "Healthcare 4 Elder | Admin Dashboard",
-  description: "AI-Driven Preventive Elderly Healthcare Monitoring System",
+  title: "AEC Admin · Strategic Hub",
+  description: "AI Elderly Care Monitoring System",
 };
 
 export default function RootLayout({
@@ -23,9 +14,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="th" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {children}
+    <html lang="en">
+      <body className="antialiased theme-admin">
+        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--aec-bg)' }}>
+          <Sidebar role="admin" />
+          <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );

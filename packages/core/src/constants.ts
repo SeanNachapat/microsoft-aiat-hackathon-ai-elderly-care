@@ -4,11 +4,11 @@ export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost
 export const WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:4000';
 
 export const RISK_LEVELS = {
-  CRITICAL: 'วิกฤต',
-  HIGH: 'เสี่ยงสูง',
-  MEDIUM: 'ปานกลาง',
-  NORMAL: 'ปกติ',
-  LOW: 'ต่ำ'
+  CRITICAL: 'Critical',
+  HIGH: 'High',
+  MEDIUM: 'Medium',
+  NORMAL: 'Normal',
+  LOW: 'Low'
 } as const;
 
 export const STATUS_COLORS = {

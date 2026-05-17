@@ -68,3 +68,5 @@ body {
 .main-content {
   flex: 1 0 auto;
 }
+
+#next-build-watcher, #__next-build-watcher { display: none !important; }

@@ -4,6 +4,8 @@ import path from 'path';
 
 // Load .env from the backend workspace root
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+// Override/add variables from .env.local (Azure keys)
+dotenv.config({ path: path.resolve(__dirname, '../../../elderly-dashboard/.env.local') });
 
 const envSchema = z.object({
   PORT: z.coerce.number().default(4000),
@@ -18,6 +20,12 @@ const envSchema = z.object({
     .string()
     .default('http://localhost:3000,http://localhost:3001,http://localhost:3002')
     .transform((v) => v.split(',').map((s) => s.trim())),
+  GOOGLE_AI_API_KEY: z.string().optional(),
+  AZURE_SPEECH_KEY: z.string().optional(),
+  AZURE_SPEECH_REGION: z.string().optional(),
+  AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
+  AZURE_OPENAI_API_KEY: z.string().optional(),
+  AZURE_OPENAI_DEPLOYMENT: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

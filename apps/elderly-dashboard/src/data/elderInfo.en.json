@@ -1,0 +1,100 @@
+{
+  "patientId": "AEC-001847",
+  "name": "Somsri",
+  "preferredName": "Khun Somsri",
+  "age": 78,
+  "gender": "Female",
+  "livingSituation": "Lives alone in a 2-bedroom apartment in Bangkok, Lat Phrao district. Son Sean visits on weekends. Nearest neighbor is a friendly lady named Malee on the same floor.",
+  "caregiverNotes": "She missed her Glucosamine on Wednesday — said she forgot to eat breakfast first. Her knees have been bothering her more this week due to the rainy season. She mentioned feeling lonely in the evenings but quickly changed the subject. Bring up the orchid bloom — it genuinely made her happy last session.",
+  "missedMedicationsThisWeek": 1,
+  "familyCalledRecently": false,
+  "lastSessionMood": "lonely",
+  "healthConditions": [
+    {
+      "condition": "Mild Hypertension",
+      "severity": "mild",
+      "notes": "Well-controlled with Amlodipine. Stress and emotional distress can elevate. Keep conversations calm. If she mentions headache + dizziness together, escalate to Level 3."
+    },
+    {
+      "condition": "Early-stage Osteoarthritis (both knees)",
+      "severity": "mild",
+      "notes": "Flares up in cold or rainy weather. She tends to push through pain without complaining. Ask specifically about her knees on rainy days or if she mentions difficulty walking."
+    }
+  ],
+  "medications": [
+    {
+      "name": "Amlodipine",
+      "dose": "5mg",
+      "purpose": "Blood pressure regulation",
+      "schedule": "08:00",
+      "time": "08:00",
+      "withFood": false,
+      "notes": "Once daily in the morning. If she skips this, flag to caregiver. Do not alarm her — ask gently."
+    },
+    {
+      "name": "Glucosamine",
+      "dose": "1 capsule",
+      "purpose": "Joint support for osteoarthritis",
+      "schedule": "08:30",
+      "time": "08:30",
+      "withFood": true,
+      "notes": "Must be taken with breakfast. Always confirm she has eaten before asking about this one."
+    }
+  ],
+  "dailySchedule": {
+    "wakeTime": "06:30",
+    "morningPrayer": "06:45",
+    "breakfast": "08:30",
+    "morningMedications": ["08:00 Amlodipine", "08:30 Glucosamine with breakfast"],
+    "lunchTime": "12:30",
+    "napTime": "14:00-15:00",
+    "afternoonTea": "15:30",
+    "gardeningTime": "16:00-16:45 (when knees allow)",
+    "dinnerTime": "18:30",
+    "eveningRoutine": "Watch news at 19:00, listen to Thai music 20:00",
+    "bedTime": "21:30"
+  },
+  "hobbies": [
+    "Orchid gardening on her balcony — has 12 orchid plants, very proud of a rare purple Dendrobium she has been growing for 3 years",
+    "Listening to classic Thai string music and mor lam from the 1970s — her favorite singer is Pumpuang Duangjan",
+    "Reading short Thai mystery novels — currently reading a series by 'V. Vajiramedhi'"
+  ],
+  "personality": {
+    "temperament": "Gentle, soft-spoken, and reserved. Warms up quickly when talking about her orchids or her son Sean.",
+    "communicationStyle": "Indirect — rarely asks for help outright. Listen for hints rather than direct requests.",
+    "sensitivities": [
+      "Does not like feeling like a burden to Sean",
+      "Gets quietly sad when she has not heard from Sean for more than 2 days",
+      "Dislikes being rushed or talked over",
+      "Proud of her independence — frame health reminders as care, not supervision"
+    ],
+    "brightensWhen": [
+      "Talking about her purple Dendrobium orchid",
+      "Mentioning Sean's childhood stories",
+      "Discussing Pumpuang Duangjan songs",
+      "Asked about what she cooked or ate that day"
+    ]
+  },
+  "emergencyContact": {
+    "name": "Sean",
+    "relationship": "Son — Primary caregiver and family contact",
+    "phone": "+66 81-234-5678",
+    "location": "Bangkok — approximately 40 minutes away",
+    "alertThreshold": "medium — notify for loneliness signals, missed meds, low mood",
+    "preferredAlertMethod": "SMS first, then call if no response within 15 minutes"
+  },
+  "sessionContext": {
+    "lastSessionDate": "2025-05-16",
+    "lastSessionMood": "lonely",
+    "lastSessionSummary": "Somsri mentioned Sean had not called in 3 days. She said she was fine but her voice was flat and her answers were short. Mood improved slightly near the end when she talked about her purple orchid starting to bloom.",
+    "missedMedicationsThisWeek": 1,
+    "familyCalledRecently": false,
+    "familyLastContactHoursAgo": 68,
+    "caregiverNotes": [
+      "She missed her Glucosamine on Wednesday — said she forgot to eat breakfast first.",
+      "Her knees have been bothering her more this week due to the rainy season.",
+      "She mentioned feeling lonely in the evenings but quickly changed the subject.",
+      "Bring up the orchid bloom — it genuinely made her happy last session."
+    ]
+  }
+}

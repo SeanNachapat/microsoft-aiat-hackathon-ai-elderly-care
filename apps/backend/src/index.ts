@@ -33,6 +33,12 @@ const io = new SocketIOServer(httpServer, {
   path: '/ws',
 });
 
+import { AzureRealtimeService } from './services/azureRealtime';
+import { analyzeTurn } from './services/analyzeTurn';
+import { evaluateActions } from './services/alertRouter';
+
+const aiSessions = new Map<string, AzureRealtimeService>();
+
 io.on('connection', (socket) => {
   logger.info(`🔌 Client connected: ${socket.id}`);
 
@@ -41,6 +47,78 @@ io.on('connection', (socket) => {
     mockMode: env.MOCK_MODE,
     timestamp: new Date().toISOString(),
   });
+
+  // ─── Caregiver Room ───
+  socket.on('caregiver:join', () => {
+    socket.join('caregiver-panel');
+    logger.info(`👩‍⚕️ Caregiver joined monitoring panel: ${socket.id}`);
+  });
+
+  // ─── Gemini Live Voice Handlers ───
+  
+  socket.on('voice:start', async (data: { systemInstruction: string }) => {
+    try {
+      const service = new AzureRealtimeService();
+      aiSessions.set(socket.id, service);
+      await service.startSession(socket, data.systemInstruction);
+      // Notify caregivers that a session started
+      io.to('caregiver-panel').emit('session:started', {
+        socketId: socket.id,
+        patientId: 'AEC-001847',
+        patientName: 'Somsri',
+        timestamp: new Date().toISOString()
+      });
+    } catch (err) {
+      logger.error(`Voice start failed: ${err}`);
+      socket.emit('voice:error', 'Voice service unavailable');
+    }
+  });
+
+  socket.on('voice:audio', (base64Audio: string) => {
+    const service = aiSessions.get(socket.id);
+    if (service) {
+      service.sendAudio(base64Audio);
+    }
+  });
+
+  // ─── Turn Analysis Pipeline ───
+  socket.on('voice:transcript', async (data: { text: string; speaker: 'elder' | 'ai' }) => {
+    // Push transcript to caregiver panel
+    io.to('caregiver-panel').emit('transcript:new', {
+      speaker: data.speaker,
+      text: data.text,
+      timestamp: new Date().toISOString()
+    });
+
+    // Only analyze elder speech (not AI responses)
+    if (data.speaker === 'elder') {
+      try {
+        const analysis = await analyzeTurn(data.text);
+        // Push analysis to caregiver panel
+        io.to('caregiver-panel').emit('analysis:new', analysis);
+        // Evaluate and auto-trigger actions
+        evaluateActions(analysis, (action, payload) => {
+          io.to('caregiver-panel').emit(action, payload);
+        });
+      } catch (err) {
+        logger.error(`Analysis pipeline error: ${err}`);
+      }
+    }
+  });
+
+  socket.on('voice:stop', () => {
+    const service = aiSessions.get(socket.id);
+    if (service) {
+      service.stopSession();
+      aiSessions.delete(socket.id);
+    }
+    io.to('caregiver-panel').emit('session:ended', {
+      socketId: socket.id,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // ─── Patient Subscriptions ───
 
   socket.on('subscribe:patient', (patientId: string) => {
     socket.join(`patient:${patientId}`);
@@ -53,8 +131,18 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     logger.info(`🔌 Client disconnected: ${socket.id}`);
+    const service = aiSessions.get(socket.id);
+    if (service) {
+      service.stopSession();
+      aiSessions.delete(socket.id);
+    }
+    io.to('caregiver-panel').emit('session:ended', {
+      socketId: socket.id,
+      timestamp: new Date().toISOString()
+    });
   });
 });
+
 
 // ─── Express Middleware ────────────────────────────────────────────────────────
 
@@ -97,6 +185,24 @@ app.get('/api/health', (_req, res) => {
       ],
     },
   });
+});
+
+// ─── SOS HTTP Fallback (public — no API key, always available) ────────────────
+
+app.post('/api/sos', (req, res) => {
+  const { patientId } = req.body || {};
+  logger.warn(`🚨🚨🚨 SOS TRIGGERED via HTTP fallback for patient: ${patientId || 'unknown'}`);
+  
+  // Broadcast to all caregiver panels
+  io.to('caregiver-panel').emit('action:sos', {
+    type: 'sos',
+    priority: 'critical',
+    trigger: 'manual',
+    message: `SOS button pressed by patient ${patientId}`,
+    timestamp: new Date().toISOString()
+  });
+
+  res.json({ status: 'sos_triggered', timestamp: new Date().toISOString() });
 });
 
 // ─── API Routes (protected by API key) ────────────────────────────────────────

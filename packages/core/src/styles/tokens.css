@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&family=Sarabun:wght@400;500;600;700&display=swap');
+
+:root {
+  /* AEC BRAND COLORS */
+  --aec-green: #1B4D3E;       /* Primary, nav, headers */
+  --aec-gold: #C9A84C;        /* Accents, CTAs, badges */
+  --aec-alert: #D94040;       /* Emergencies, critical alerts */
+  --aec-amber: #E89C2F;       /* Warnings, medium priority */
+  --aec-bg: #F5F5F0;          /* App background */
+  --aec-surface: #FFFFFF;     /* Cards, panels */
+  --aec-text: #1A1A1A;        /* Primary text */
+  --aec-text-muted: #6B7280;  /* Secondary text */
+  --aec-border: #E5E7EB;      /* Dividers, card borders */
+  --aec-success: #16A34A;     /* Normal status, resolved */
+
+  /* TYPOGRAPHY */
+  --font-sans: 'Geist', 'Sarabun', sans-serif;
+  --font-mono: 'Geist Mono', monospace;
+  --font-thai: 'Sarabun', sans-serif;
+  
+  /* SPACING & RADIUS */
+  --radius-sm: 8px;
+  --radius: 16px;
+  --radius-lg: 24px;
+  
+  --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.2s ease;
+
+  /* ROLE-SPECIFIC OVERRIDES (Optional shortcuts) */
+  --elderly-bg: var(--aec-bg);
+  --elderly-text: var(--aec-text);
+  --caregiver-accent: var(--aec-green);
+  --admin-accent: var(--aec-gold);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--aec-bg);
+  color: var(--aec-text);
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base Styles for each App Theme */
+.theme-elderly {
+  --base-font-size: 20px;
+  font-size: var(--base-font-size);
+}
+
+.theme-caregiver {
+  --base-font-size: 16px;
+  font-size: var(--base-font-size);
+}
+
+.theme-admin {
+  --base-font-size: 14px;
+  font-size: var(--base-font-size);
+}
+
+/* Utility for AEC Glassmorphism */
+.aec-glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Utility for AEC Shadows */
+.aec-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.aec-shadow-lg {
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+}
