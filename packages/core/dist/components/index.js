@@ -14,136 +14,66 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ProgressTrack = exports.AuditItem = exports.SectionHeader = exports.AlertDot = exports.VitalPill = exports.StatusBadge = exports.PatientAvatar = void 0;
+exports.PatientAvatar = exports.AppTypography = exports.SensorCard = exports.StatusBadge = void 0;
 const jsx_runtime_1 = require("react/jsx-runtime");
-const PatientAvatar = ({ name, size = 'md' }) => {
-    const initial = name.charAt(0);
-    // Deterministic color mapping
-    const getColor = (char) => {
-        if (['ท', 'ส'].includes(char))
-            return 'var(--amber)';
-        if (['ม', 'อ'].includes(char))
-            return 'var(--sage)';
-        if (['ป'].includes(char))
-            return 'var(--sky)';
-        return 'var(--stone)';
-    };
-    const sizeMap = {
-        sm: '28px',
-        md: '36px',
-        lg: '52px'
-    };
-    return ((0, jsx_runtime_1.jsx)("div", { style: {
-            width: sizeMap[size],
-            height: sizeMap[size],
-            borderRadius: '50%',
-            backgroundColor: getColor(initial),
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: 600,
-            fontSize: size === 'sm' ? '12px' : size === 'lg' ? '20px' : '14px',
-            flexShrink: 0
-        }, children: initial }));
-};
-exports.PatientAvatar = PatientAvatar;
-const StatusBadge = ({ status }) => {
+// Re-exports
+__exportStar(require("./Button"), exports);
+__exportStar(require("./Card"), exports);
+__exportStar(require("./Sidebar"), exports);
+__exportStar(require("./Logo"), exports);
+// AEC Status Badge
+const StatusBadge = ({ status, label }) => {
     const config = {
-        critical: { th: 'วิกฤต', en: 'Critical', bg: 'var(--coral-light)', text: 'var(--coral)', border: '3px solid var(--coral)' },
-        warning: { th: 'เฝ้าระวัง', en: 'Warning', bg: 'var(--amber-light)', text: 'var(--amber)', border: '3px solid var(--amber)' },
-        normal: { th: 'ปกติ', en: 'Normal', bg: 'var(--sage-light)', text: 'var(--sage-dark)', border: '3px solid var(--sage)' }
+        normal: { color: 'var(--aec-green)', bg: 'rgba(27, 77, 62, 0.1)', text: 'All Normal' },
+        success: { color: 'var(--aec-success)', bg: 'rgba(22, 163, 74, 0.1)', text: 'Resolved' },
+        warning: { color: 'var(--aec-amber)', bg: 'rgba(232, 156, 47, 0.1)', text: 'Warning' },
+        critical: { color: 'var(--aec-alert)', bg: 'rgba(217, 64, 64, 0.1)', text: 'Critical Alert' },
     };
-    const { th, en, bg, text, border } = config[status];
+    const { color, bg, text } = config[status];
     return ((0, jsx_runtime_1.jsxs)("div", { style: {
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '4px',
-            backgroundColor: bg,
-            color: text,
-            padding: '2px 10px',
-            borderRadius: '20px',
-            fontSize: '10px',
-            fontWeight: 600,
-            borderLeft: border
-        }, children: [(0, jsx_runtime_1.jsx)("span", { children: th }), (0, jsx_runtime_1.jsx)("span", { style: { opacity: 0.7 }, children: "\u00B7" }), (0, jsx_runtime_1.jsx)("span", { children: en })] }));
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            backgroundColor: bg, color: color, padding: '8px 16px',
+            borderRadius: '40px', fontWeight: 700, fontSize: '0.85em'
+        }, children: [(0, jsx_runtime_1.jsx)("div", { style: { width: '8px', height: '8px', borderRadius: '50%', backgroundColor: color } }), label || text] }));
 };
 exports.StatusBadge = StatusBadge;
-const VitalPill = ({ label, value, unit, status = 'normal' }) => {
-    const statusColor = {
-        critical: 'var(--coral)',
-        warning: 'var(--amber)',
-        normal: 'var(--text-primary)'
-    }[status];
-    return ((0, jsx_runtime_1.jsxs)("div", { style: {
-            backgroundColor: 'var(--sand)',
-            padding: '6px 10px',
-            borderRadius: '6px',
-            display: 'flex',
-            flexDirection: 'column',
-            minWidth: '60px'
-        }, children: [(0, jsx_runtime_1.jsx)("span", { style: { fontSize: '9px', color: 'var(--text-muted)', fontWeight: 500, textTransform: 'uppercase' }, children: label }), (0, jsx_runtime_1.jsxs)("div", { style: { display: 'flex', alignItems: 'baseline', gap: '2px' }, children: [(0, jsx_runtime_1.jsx)("span", { style: { fontSize: '13px', fontWeight: 600, color: statusColor }, children: value }), (0, jsx_runtime_1.jsx)("span", { style: { fontSize: '9px', color: 'var(--text-muted)' }, children: unit })] })] }));
-};
-exports.VitalPill = VitalPill;
-const AlertDot = ({ status }) => {
+// AEC Sensor Reading Card
+const SensorCard = ({ icon, label, value, unit, status = 'normal' }) => {
     const colorMap = {
-        critical: 'var(--coral)',
-        warning: 'var(--amber)',
-        normal: 'var(--sage)',
-        inactive: 'var(--stone)'
+        normal: 'var(--aec-green)',
+        warning: 'var(--aec-amber)',
+        critical: 'var(--aec-alert)',
     };
-    return ((0, jsx_runtime_1.jsx)("div", { style: {
-            width: '8px',
-            height: '8px',
-            borderRadius: '50%',
-            backgroundColor: colorMap[status],
-            flexShrink: 0
-        } }));
-};
-exports.AlertDot = AlertDot;
-const SectionHeader = ({ title, actionLabel, onAction }) => {
-    return ((0, jsx_runtime_1.jsxs)("div", { style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }, children: [(0, jsx_runtime_1.jsx)("h3", { style: { fontSize: '14px', fontWeight: 600, color: 'var(--earth)' }, children: title }), actionLabel && ((0, jsx_runtime_1.jsx)("button", { onClick: onAction, style: {
-                    fontSize: '12px',
-                    color: 'var(--sage)',
-                    background: 'none',
-                    border: 'none',
-                    cursor: 'pointer',
-                    padding: 0,
-                    fontWeight: 500
-                }, children: actionLabel }))] }));
-};
-exports.SectionHeader = SectionHeader;
-const AuditItem = ({ title, body, icon }) => {
     return ((0, jsx_runtime_1.jsxs)("div", { style: {
-            backgroundColor: 'var(--sand)',
-            borderRadius: 'var(--radius-sm)',
-            padding: '10px 12px',
-            marginBottom: '8px'
-        }, children: [(0, jsx_runtime_1.jsxs)("div", { style: { display: 'flex', alignItems: 'center', gap: '6px', marginBottom: '4px' }, children: [icon, (0, jsx_runtime_1.jsx)("span", { style: { fontSize: '11px', fontWeight: 600, color: 'var(--text-primary)' }, children: title })] }), (0, jsx_runtime_1.jsx)("p", { style: { fontSize: '10px', color: 'var(--text-secondary)', margin: 0, lineHeight: '1.4' }, children: body })] }));
+            backgroundColor: 'var(--aec-surface)', padding: '20px',
+            borderRadius: 'var(--radius)', border: '1px solid var(--aec-border)',
+            display: 'flex', flexDirection: 'column', gap: '12px'
+        }, className: "aec-shadow", children: [(0, jsx_runtime_1.jsxs)("div", { style: { color: 'var(--aec-text-muted)', display: 'flex', alignItems: 'center', gap: '8px' }, children: [icon, (0, jsx_runtime_1.jsx)("span", { style: { fontSize: '0.8em', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }, children: label })] }), (0, jsx_runtime_1.jsxs)("div", { style: { display: 'flex', alignItems: 'baseline', gap: '4px' }, children: [(0, jsx_runtime_1.jsx)("span", { style: { fontSize: '1.5em', fontWeight: 800, color: colorMap[status] }, children: value }), unit && (0, jsx_runtime_1.jsx)("span", { style: { fontSize: '0.9em', color: 'var(--aec-text-muted)' }, children: unit })] })] }));
 };
-exports.AuditItem = AuditItem;
-const ProgressTrack = ({ value, variant = 'normal' }) => {
-    const colorMap = {
-        normal: 'var(--sage)',
-        warning: 'var(--amber)',
-        critical: 'var(--coral)'
+exports.SensorCard = SensorCard;
+// AEC Typography
+const AppTypography = ({ variant, children, style, className }) => {
+    const styles = {
+        h1: { fontSize: '1.75em', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, fontFamily: 'var(--font-sans)' },
+        h2: { fontSize: '1.25em', fontWeight: 700, margin: 0, fontFamily: 'var(--font-sans)' },
+        body: { fontSize: '1em', lineHeight: 1.5, fontFamily: 'var(--font-sans)' },
+        caps: { fontSize: '0.7em', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--aec-text-muted)', fontFamily: 'var(--font-sans)' },
+        mono: { fontSize: '0.9em', fontFamily: 'var(--font-mono)', opacity: 0.8 },
     };
-    return ((0, jsx_runtime_1.jsx)("div", { style: {
-            height: '6px',
-            width: '100%',
-            backgroundColor: 'var(--sand2)',
-            borderRadius: '20px',
-            overflow: 'hidden'
-        }, children: (0, jsx_runtime_1.jsx)("div", { style: {
-                height: '100%',
-                width: `${Math.min(100, Math.max(0, value))}%`,
-                backgroundColor: colorMap[variant],
-                borderRadius: '20px',
-                transition: 'width 0.3s ease'
-            } }) }));
+    const Tag = (variant === 'h1' || variant === 'h2' ? variant : 'p');
+    return (0, jsx_runtime_1.jsx)(Tag, { className: className, style: { ...styles[variant], ...style }, children: children });
 };
-exports.ProgressTrack = ProgressTrack;
-__exportStar(require("./Sidebar"), exports);
-__exportStar(require("./HeroBanner"), exports);
-__exportStar(require("./Logo"), exports);
+exports.AppTypography = AppTypography;
+// AEC Patient Avatar
+const PatientAvatar = ({ name, size = 'md' }) => {
+    const initial = name.charAt(0);
+    const sizeMap = { sm: '40px', md: '56px', lg: '80px' };
+    return ((0, jsx_runtime_1.jsx)("div", { style: {
+            width: sizeMap[size], height: sizeMap[size], borderRadius: '50%',
+            background: 'var(--aec-green)', color: 'white',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 800, fontSize: size === 'lg' ? '2em' : '1.2em'
+        }, className: "aec-shadow", children: initial }));
+};
+exports.PatientAvatar = PatientAvatar;
 //# sourceMappingURL=index.js.map

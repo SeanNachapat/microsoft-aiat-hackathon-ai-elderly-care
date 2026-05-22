@@ -30,6 +30,8 @@ const envSchema = zod_1.z.object({
     AZURE_OPENAI_ENDPOINT: zod_1.z.string().url().optional(),
     AZURE_OPENAI_API_KEY: zod_1.z.string().optional(),
     AZURE_OPENAI_DEPLOYMENT: zod_1.z.string().optional(),
+    LINE_CHANNEL_ACCESS_TOKEN: zod_1.z.string().optional(),
+    LINE_CAREGIVER_USER_ID: zod_1.z.string().optional(),
 });
 const parsed = envSchema.safeParse(process.env);
 if (!parsed.success) {

@@ -10,6 +10,7 @@ import {
   Mail, Calendar, Shield, FileText, Mic, Send,
   ChevronDown, ChevronUp, Siren, Heart, BellRing
 } from 'lucide-react';
+import elderInfo from '../../../../elderly-dashboard/src/data/elderInfo.json';
 
 // ─── Type Definitions ───
 interface TranscriptEntry {
@@ -213,10 +214,10 @@ export default function LiveMonitorPage() {
           <Card style={{ padding: '24px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '20px' }}>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
-                <PatientAvatar name={session?.patientName || 'Somsri'} size="lg" />
+                <PatientAvatar name={session?.patientName || elderInfo.preferredName || elderInfo.name} size="lg" />
                 <div>
-                  <AppTypography variant="h2" style={{ fontSize: '20px' }}>{session?.patientName || 'Somsri'}</AppTypography>
-                  <AppTypography variant="caps" style={{ fontSize: '11px' }}>ID: {session?.patientId || 'AEC-001847'}</AppTypography>
+                  <AppTypography variant="h2" style={{ fontSize: '20px' }}>{session?.patientName || elderInfo.preferredName || elderInfo.name}</AppTypography>
+                  <AppTypography variant="caps" style={{ fontSize: '11px' }}>ID: {session?.patientId || elderInfo.patientId}</AppTypography>
                 </div>
               </div>
               <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
@@ -328,7 +329,7 @@ export default function LiveMonitorPage() {
               <AlertTriangle color="var(--aec-alert)" size={20} /> Action Triggers
             </AppTypography>
             
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <ActionCard icon={<Mail size={16} />} label="Alert Family (SMS)" trigger="auto" condition="Loneliness > 0.75" fired={actions.some(a => a.type === 'notify_family')} />
               <ActionCard icon={<Calendar size={16} />} label="Schedule Callback" trigger="auto" condition="Isolation signal" fired={actions.some(a => a.type === 'schedule_followup')} />
               <ActionCard icon={<Phone size={16} />} label="Call Caregiver" trigger="manual" condition="Button click" fired={false} onClick={() => socketRef.current?.emit('action:call_caregiver', { trigger: 'manual' })} />
@@ -396,10 +397,11 @@ const ActionCard = ({ icon, label, trigger, condition, fired, critical, onClick 
   <div 
     onClick={onClick}
     style={{ 
-      display: 'flex', alignItems: 'center', gap: '12px', padding: '12px',
-      borderRadius: '10px', border: `1px solid ${critical && fired ? 'var(--aec-alert)' : 'var(--aec-border)'}`,
-      backgroundColor: fired ? (critical ? 'rgba(217, 64, 64, 0.05)' : 'rgba(27, 77, 62, 0.05)') : 'transparent',
-      cursor: onClick ? 'pointer' : 'default'
+      display: 'flex', alignItems: 'center', gap: '12px', padding: '10px 16px',
+      borderRadius: '8px', border: 'none',
+      backgroundColor: fired ? (critical ? 'rgba(217, 64, 64, 0.08)' : 'rgba(27, 77, 62, 0.08)') : 'var(--aec-bg)',
+      cursor: onClick ? 'pointer' : 'default',
+      transition: 'all 0.2s ease'
     }}
   >
     <div style={{ color: fired ? (critical ? 'var(--aec-alert)' : 'var(--aec-green)') : 'var(--aec-text-muted)' }}>{icon}</div>

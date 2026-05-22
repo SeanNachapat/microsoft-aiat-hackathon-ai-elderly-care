@@ -83,9 +83,9 @@ io.on('connection', (socket) => {
             timestamp: new Date().toISOString()
         });
         // Only analyze elder speech (not AI responses)
-        if (data.speaker === 'elder' && env_1.env.GOOGLE_AI_API_KEY) {
+        if (data.speaker === 'elder') {
             try {
-                const analysis = await (0, analyzeTurn_1.analyzeTurn)(data.text, env_1.env.GOOGLE_AI_API_KEY);
+                const analysis = await (0, analyzeTurn_1.analyzeTurn)(data.text);
                 // Push analysis to caregiver panel
                 io.to('caregiver-panel').emit('analysis:new', analysis);
                 // Evaluate and auto-trigger actions
@@ -180,6 +180,43 @@ app.post('/api/sos', (req, res) => {
         timestamp: new Date().toISOString()
     });
     res.json({ status: 'sos_triggered', timestamp: new Date().toISOString() });
+});
+// ─── LINE Bot Webhook (public — LINE platform needs to reach this) ────────────
+app.post('/api/line/webhook', (req, res) => {
+    const events = req.body?.events || [];
+    if (events.length === 0) {
+        // LINE webhook verification (empty events array)
+        return res.status(200).json({ status: 'ok' });
+    }
+    for (const event of events) {
+        const userId = event.source?.userId;
+        // ✨ IMPORTANT: Log the User ID prominently so you can copy it to .env.local
+        logger_1.default.info(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        logger_1.default.info(`📩 LINE Event: ${event.type}`);
+        logger_1.default.info(`👤 LINE User ID: ${userId}`);
+        logger_1.default.info(`   ↑ Copy this to LINE_CAREGIVER_USER_ID in .env.local`);
+        logger_1.default.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+        if (event.type === 'follow') {
+            // User just added/followed the bot
+            logger_1.default.info(`🎉 New follower! User ID: ${userId}`);
+        }
+        if (event.type === 'message' && event.message?.type === 'text') {
+            const caregiverText = event.message.text;
+            logger_1.default.info(`💬 LINE message from caregiver: "${caregiverText}"`);
+            // Forward caregiver's LINE reply to the dashboard
+            io.to('caregiver-panel').emit('caregiver:line_message', {
+                text: caregiverText,
+                from: userId,
+                timestamp: new Date().toISOString()
+            });
+        }
+    }
+    // LINE requires a 200 response
+    res.status(200).json({ status: 'ok' });
+});
+// Simple health check for LINE webhook verification
+app.get('/api/line/webhook', (_req, res) => {
+    res.json({ status: 'LINE webhook active', timestamp: new Date().toISOString() });
 });
 // ─── API Routes (protected by API key) ────────────────────────────────────────
 app.use('/api', auth_1.apiKeyAuth);

@@ -1,24 +1,25 @@
 {
-  "patientId": "AEC-001847",
-  "name": "Somsri",
-  "preferredName": "Khun Somsri",
-  "age": 78,
-  "gender": "Female",
-  "livingSituation": "Lives alone in a 2-bedroom apartment in Bangkok, Lat Phrao district. Son Sean visits on weekends. Nearest neighbor is a friendly lady named Malee on the same floor.",
-  "caregiverNotes": "She missed her Glucosamine on Wednesday — said she forgot to eat breakfast first. Her knees have been bothering her more this week due to the rainy season. She mentioned feeling lonely in the evenings but quickly changed the subject. Bring up the orchid bloom — it genuinely made her happy last session.",
+  "patientId": "AEC-001848",
+  "name": "Somchai",
+  "preferredName": "Khun Somchai",
+  "age": 74,
+  "gender": "Male",
+  "livingSituation": "Lives alone in a 1-bedroom condo on the 4th floor in Nonthaburi. Son Pete works in Chiang Mai and visits once or twice a month. Nearest neighbor is an elderly couple named Prasert and Noi two doors down.",
+  "caregiverNotes": "Somchai tends to downplay discomfort — if he says he is fine, ask once more gently. He missed his Amlodipine on Monday because he woke up late and skipped breakfast. His knees have been stiff this week from the rain. He has not heard from Pete in 4 days and mentioned it casually but his voice was noticeably flat. Bring up his chili peppers or his stamp collection — both topics make him light up immediately.",
   "missedMedicationsThisWeek": 1,
   "familyCalledRecently": false,
   "lastSessionMood": "lonely",
+  "lastSessionLanguage": "en",
   "healthConditions": [
     {
       "condition": "Mild Hypertension",
       "severity": "mild",
-      "notes": "Well-controlled with Amlodipine. Stress and emotional distress can elevate. Keep conversations calm. If she mentions headache + dizziness together, escalate to Level 3."
+      "notes": "Managed with Amlodipine 5mg every morning. Somchai tends to forget when he skips breakfast. Emotional stress and loneliness can raise blood pressure. If he mentions headache and dizziness at the same time, escalate to Level 3 immediately."
     },
     {
       "condition": "Early-stage Osteoarthritis (both knees)",
       "severity": "mild",
-      "notes": "Flares up in cold or rainy weather. She tends to push through pain without complaining. Ask specifically about her knees on rainy days or if she mentions difficulty walking."
+      "notes": "Gets worse in rainy or cold weather. Somchai refuses to admit how much it hurts — he will say the knees are fine when they are clearly not. Ask directly on rainy days. Remind him not to stand too long when gardening on the balcony."
     }
   ],
   "medications": [
@@ -29,72 +30,74 @@
       "schedule": "08:00",
       "time": "08:00",
       "withFood": false,
-      "notes": "Once daily in the morning. If she skips this, flag to caregiver. Do not alarm her — ask gently."
+      "notes": "Once daily in the morning. Does not require food. If he skips, flag to Pete immediately. Ask gently — do not alarm him."
     },
     {
       "name": "Glucosamine",
       "dose": "1 capsule",
-      "purpose": "Joint support for osteoarthritis",
+      "purpose": "Joint support for knee osteoarthritis",
       "schedule": "08:30",
       "time": "08:30",
       "withFood": true,
-      "notes": "Must be taken with breakfast. Always confirm she has eaten before asking about this one."
+      "notes": "Must be taken with breakfast. Always ask if he has eaten first before checking on this medication. He skipped it Monday because he had no appetite."
     }
   ],
   "dailySchedule": {
     "wakeTime": "06:30",
-    "morningPrayer": "06:45",
-    "breakfast": "08:30",
-    "morningMedications": ["08:00 Amlodipine", "08:30 Glucosamine with breakfast"],
-    "lunchTime": "12:30",
-    "napTime": "14:00-15:00",
-    "afternoonTea": "15:30",
-    "gardeningTime": "16:00-16:45 (when knees allow)",
-    "dinnerTime": "18:30",
-    "eveningRoutine": "Watch news at 19:00, listen to Thai music 20:00",
-    "bedTime": "21:30"
+    "morningRoutine": "Makes coffee, sits on the balcony, checks on chili pepper plants",
+    "breakfast": "08:00-08:30",
+    "morningMedications": [
+      "08:00 — Amlodipine (no food required)",
+      "08:30 — Glucosamine with breakfast"
+    ],
+    "lunchTime": "12:00",
+    "napTime": "13:00-14:00",
+    "afternoonActivity": "Watches old Muay Thai fights on YouTube from 15:00, tends to balcony garden 16:00",
+    "dinnerTime": "18:00",
+    "eveningRoutine": "Watches evening news at 19:00, sorts his stamp collection at 20:00",
+    "bedTime": "22:00"
   },
   "hobbies": [
-    "Orchid gardening on her balcony — has 12 orchid plants, very proud of a rare purple Dendrobium she has been growing for 3 years",
-    "Listening to classic Thai string music and mor lam from the 1970s — her favorite singer is Pumpuang Duangjan",
-    "Reading short Thai mystery novels — currently reading a series by 'V. Vajiramedhi'"
+    "Growing chili peppers on his balcony — currently has 6 pots, very proud of a Prik Kee Noo plant that is finally turning red after 3 weeks",
+    "Watching classic Muay Thai fights on YouTube — favorite era is the 1980s, favorite fighter is Samart Payakaroon",
+    "Collecting vintage Thai postage stamps — has been collecting for 30 years, most prized stamp is a 1967 SEAP Games commemorative issue"
   ],
   "personality": {
-    "temperament": "Gentle, soft-spoken, and reserved. Warms up quickly when talking about her orchids or her son Sean.",
-    "communicationStyle": "Indirect — rarely asks for help outright. Listen for hints rather than direct requests.",
+    "temperament": "Warm and talkative once comfortable, but puts up a tough front at first. Tends to be slightly dramatic about small things and completely stoic about serious things. Loves to make people laugh.",
+    "communicationStyle": "Direct but indirect about pain — will joke about something that is actually bothering him. Listen between the lines.",
     "sensitivities": [
-      "Does not like feeling like a burden to Sean",
-      "Gets quietly sad when she has not heard from Sean for more than 2 days",
-      "Dislikes being rushed or talked over",
-      "Proud of her independence — frame health reminders as care, not supervision"
+      "Does not want Pete to worry or feel guilty about working far away",
+      "Gets quietly lonely in the evenings after 20:00 when the house is too quiet",
+      "Proud man — dislikes being reminded he is getting older",
+      "Hates being told what to do — frame everything as a suggestion, never a command"
     ],
     "brightensWhen": [
-      "Talking about her purple Dendrobium orchid",
-      "Mentioning Sean's childhood stories",
-      "Discussing Pumpuang Duangjan songs",
-      "Asked about what she cooked or ate that day"
+      "Talking about his Prik Kee Noo chili pepper finally turning red",
+      "Discussing Samart Payakaroon's fighting style",
+      "Showing off knowledge about rare Thai stamps",
+      "Telling stories about Pete as a child"
     ]
   },
   "emergencyContact": {
-    "name": "Sean",
+    "name": "Pete",
     "relationship": "Son — Primary caregiver and family contact",
-    "phone": "+66 81-234-5678",
-    "location": "Bangkok — approximately 40 minutes away",
-    "alertThreshold": "medium — notify for loneliness signals, missed meds, low mood",
+    "phone": "+66 89-456-7890",
+    "location": "Chiang Mai — approximately 700km away, flies down once or twice a month",
+    "alertThreshold": "medium — notify for loneliness signals, missed medications, low mood lasting more than one session",
     "preferredAlertMethod": "SMS first, then call if no response within 15 minutes"
   },
   "sessionContext": {
     "lastSessionDate": "2025-05-16",
     "lastSessionMood": "lonely",
-    "lastSessionSummary": "Somsri mentioned Sean had not called in 3 days. She said she was fine but her voice was flat and her answers were short. Mood improved slightly near the end when she talked about her purple orchid starting to bloom.",
+    "lastSessionSummary": "Somchai made several jokes but his answers were shorter than usual. Mentioned Pete had not called in a few days and immediately said it was fine. Mood lifted briefly when he talked about his chili pepper almost being ready. Did not complain about knees but moved around stiffly during the session.",
     "missedMedicationsThisWeek": 1,
     "familyCalledRecently": false,
-    "familyLastContactHoursAgo": 68,
+    "familyLastContactHoursAgo": 72,
     "caregiverNotes": [
-      "She missed her Glucosamine on Wednesday — said she forgot to eat breakfast first.",
-      "Her knees have been bothering her more this week due to the rainy season.",
-      "She mentioned feeling lonely in the evenings but quickly changed the subject.",
-      "Bring up the orchid bloom — it genuinely made her happy last session."
+      "Skipped Amlodipine on Monday — woke up late and skipped breakfast entirely.",
+      "Knees are stiff this week from the rainy season but he will not admit it.",
+      "Mentioned Pete casually but his voice dropped — classic Somchai sign that he misses him.",
+      "Bring up the chili pepper turning red — he almost smiled talking about it last time."
     ]
   }
 }

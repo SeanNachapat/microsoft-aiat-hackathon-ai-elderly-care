@@ -1,7 +1,6 @@
 import React from 'react';
 interface SidebarProps {
-    appName: string;
-    appLabelTh: string;
+    role: 'admin' | 'caregiver';
 }
 export declare const Sidebar: React.FC<SidebarProps>;
 export {};

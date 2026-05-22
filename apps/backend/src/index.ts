@@ -204,6 +204,53 @@ app.post('/api/sos', (req, res) => {
 
   res.json({ status: 'sos_triggered', timestamp: new Date().toISOString() });
 });
+// ─── LINE Bot Webhook (public — LINE platform needs to reach this) ────────────
+
+app.post('/api/line/webhook', (req, res) => {
+  const events = req.body?.events || [];
+  
+  if (events.length === 0) {
+    // LINE webhook verification (empty events array)
+    return res.status(200).json({ status: 'ok' });
+  }
+
+  for (const event of events) {
+    const userId = event.source?.userId;
+    
+    // ✨ IMPORTANT: Log the User ID prominently so you can copy it to .env.local
+    logger.info(`\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+    logger.info(`📩 LINE Event: ${event.type}`);
+    logger.info(`👤 LINE User ID: ${userId}`);
+    logger.info(`   ↑ Copy this to LINE_CAREGIVER_USER_ID in .env.local`);
+    logger.info(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n`);
+    
+    if (event.type === 'follow') {
+      // User just added/followed the bot
+      logger.info(`🎉 New follower! User ID: ${userId}`);
+    }
+    
+    if (event.type === 'message' && event.message?.type === 'text') {
+      const caregiverText = event.message.text;
+      
+      logger.info(`💬 LINE message from caregiver: "${caregiverText}"`);
+      
+      // Forward caregiver's LINE reply to the dashboard
+      io.to('caregiver-panel').emit('caregiver:line_message', {
+        text: caregiverText,
+        from: userId,
+        timestamp: new Date().toISOString()
+      });
+    }
+  }
+  
+  // LINE requires a 200 response
+  res.status(200).json({ status: 'ok' });
+});
+
+// Simple health check for LINE webhook verification
+app.get('/api/line/webhook', (_req, res) => {
+  res.json({ status: 'LINE webhook active', timestamp: new Date().toISOString() });
+});
 
 // ─── API Routes (protected by API key) ────────────────────────────────────────
 

@@ -1,11 +1,11 @@
 export declare const API_BASE_URL: string;
 export declare const WS_BASE_URL: string;
 export declare const RISK_LEVELS: {
-    readonly CRITICAL: "วิกฤต";
-    readonly HIGH: "เสี่ยงสูง";
-    readonly MEDIUM: "ปานกลาง";
-    readonly NORMAL: "ปกติ";
-    readonly LOW: "ต่ำ";
+    readonly CRITICAL: "Critical";
+    readonly HIGH: "High";
+    readonly MEDIUM: "Medium";
+    readonly NORMAL: "Normal";
+    readonly LOW: "Low";
 };
 export declare const STATUS_COLORS: {
     readonly CRITICAL: "bg-red-500";

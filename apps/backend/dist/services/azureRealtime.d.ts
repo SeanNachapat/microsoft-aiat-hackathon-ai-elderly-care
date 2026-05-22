@@ -3,8 +3,9 @@ export declare class AzureRealtimeService {
     private ws;
     private currentTurnText;
     constructor();
-    startSession(socket: Socket, systemInstruction: string): Promise<void>;
+    startSession(socket: Socket, _systemInstruction?: string): Promise<void>;
     private handleAzureMessage;
+    private runTurnAnalysis;
     private synthesizeAzureTTS;
     sendAudio(base64Data: string): void;
     stopSession(): void;

@@ -55,12 +55,54 @@ export class AzureRealtimeService {
               silence_duration_ms: config.silenceDurationMs
             },
             input_audio_transcription: {
-              model: "whisper-1", // Using whisper-1 as it supports multiple languages, or 'gpt-4o-transcribe' based on snippet
-              language: config.transcriptionLanguage
+              model: "whisper-1" // Using whisper-1 as it supports multiple languages. Omitting 'language' enables auto-detection.
             }
           }
         };
         this.ws?.send(JSON.stringify(sessionUpdate));
+
+        // Use the last session language to determine the initial greeting language.
+        const greetingLang = profile.lastSessionLanguage === 'en' ? 'en' : 'th';
+        const greetingConfig = getNurseJiraConfig(greetingLang);
+        
+        const now = new Date();
+        const hour = now.getHours();
+        const thTime = hour < 12 ? 'ตอนเช้า' : hour < 17 ? 'ตอนบ่าย' : 'ตอนเย็น';
+        const enTime = hour < 12 ? 'Morning' : hour < 17 ? 'Afternoon' : 'Evening';
+        const timeParam = greetingLang === 'th' ? thTime : enTime;
+
+        let greetingPhrase = '';
+        if (profile.lastSessionMood === 'lonely' || profile.lastSessionMood === 'sad') {
+          greetingPhrase = greetingConfig.greetings.lowMood(profile.preferredName);
+        } else {
+          greetingPhrase = greetingConfig.greetings.positive(profile.preferredName, timeParam);
+        }
+        
+        // Inform the caregiver panel of the instant greeting
+        socket.server.to('caregiver-panel').emit('transcript:new', {
+          speaker: 'ai',
+          text: greetingPhrase,
+          timestamp: new Date().toISOString()
+        });
+
+        // Immediately synthesize and send the audio to the client (Instant Start!)
+        this.synthesizeAzureTTS(greetingPhrase, socket);
+
+        // Add the greeting to the AI's context so it remembers what it just said
+        const triggerGreetingContext = {
+          type: "conversation.item.create",
+          item: {
+            type: "message",
+            role: "assistant",
+            content: [
+              {
+                type: "input_text",
+                text: greetingPhrase
+              }
+            ]
+          }
+        };
+        this.ws?.send(JSON.stringify(triggerGreetingContext));
       });
 
       this.ws.on('message', (data) => {
@@ -253,7 +295,12 @@ export class AzureRealtimeService {
       env.AZURE_SPEECH_REGION
     );
 
-    speechConfig.speechSynthesisVoiceName = config.speechVoice;
+    // DYNAMIC BILINGUAL VOICE SELECTION
+    const containsThai = /[\u0e00-\u0e7f]/.test(text);
+    const voiceName = containsThai ? 'th-TH-PremwadeeNeural' : 'en-US-JennyNeural';
+    const ssmlLang = containsThai ? 'th-TH' : 'en-US';
+
+    speechConfig.speechSynthesisVoiceName = voiceName;
     speechConfig.speechSynthesisOutputFormat =
       sdk.SpeechSynthesisOutputFormat.Raw24Khz16BitMonoPcm;
 
@@ -262,8 +309,8 @@ export class AzureRealtimeService {
     const safeText = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     const ssml = `
-      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${config.ssmlLang}">
-        <voice name="${config.speechVoice}">
+      <speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="${ssmlLang}">
+        <voice name="${voiceName}">
           <prosody rate="${config.prosodyRate}" pitch="${config.prosodyPitch}">
             ${safeText}
           </prosody>

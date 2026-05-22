@@ -14,6 +14,7 @@ interface VoiceScreenProps {
 export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
   const [state, setState] = useState<VoiceState>('idle');
   const [sessionDuration, setSessionDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
 
   const socketRef = useRef<Socket | null>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -40,8 +41,45 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
     return `${m.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
   };
 
+  // ─── Activation Chime ───
+  const playChime = useCallback((type: 'start' | 'stop' = 'start') => {
+    try {
+      const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioCtx) return;
+      const ctx = new AudioCtx();
+      const osc = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      osc.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      osc.type = 'sine';
+      
+      const freq1 = type === 'start' ? 523.25 : 659.25; // C5 or E5
+      const freq2 = type === 'start' ? 659.25 : 523.25; // E5 or C5
+
+      // First tone
+      osc.frequency.setValueAtTime(freq1, ctx.currentTime);
+      gainNode.gain.setValueAtTime(0, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.05);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+      
+      // Second tone
+      osc.frequency.setValueAtTime(freq2, ctx.currentTime + 0.2);
+      gainNode.gain.setValueAtTime(0, ctx.currentTime + 0.2);
+      gainNode.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.25);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.6);
+    } catch (e) {
+      console.error('Failed to play chime:', e);
+    }
+  }, []);
+
   // ─── Start Session ───
   const startSession = useCallback(async () => {
+    playChime();
     setState('connecting');
 
     socketRef.current = io('http://localhost:4000', {
@@ -108,8 +146,22 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
     }
   }, []);
 
+  // ─── Mute Handler ───
+  const toggleMute = useCallback(() => {
+    setIsMuted(prev => {
+      const nextMuted = !prev;
+      if (streamRef.current) {
+        streamRef.current.getAudioTracks().forEach(track => {
+          track.enabled = !nextMuted;
+        });
+      }
+      return nextMuted;
+    });
+  }, []);
+
   // ─── Stop Session ───
   const stopSession = useCallback(() => {
+    playChime('stop');
     streamRef.current?.getTracks().forEach(t => t.stop());
     processorRef.current?.disconnect();
     if (audioContextRef.current && audioContextRef.current.state !== 'closed') {
@@ -120,6 +172,7 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
     socketRef.current?.disconnect();
     socketRef.current = null;
     setSessionDuration(0);
+    setIsMuted(false);
     setState('idle');
   }, []);
 
@@ -233,7 +286,7 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
       {/* Central Orb */}
       <div style={{ position: 'relative', width: '200px', height: '200px', marginBottom: '20px' }}>
         {/* Pulse Rings (Listening state) */}
-        {state === 'listening' && (
+        {state === 'listening' && !isMuted && (
           <>
             <div className="ring ring-1" />
             <div className="ring ring-2" />
@@ -273,6 +326,8 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
         }}>
           {(state === 'connecting' || state === 'processing') 
             ? <Loader2 size={56} color="rgba(255,255,255,0.6)" className="spin" />
+            : isMuted
+            ? <MicOff size={56} color="rgba(217, 64, 64, 0.8)" />
             : state === 'listening' 
             ? <Mic size={56} color="var(--aec-gold)" />
             : state === 'speaking'
@@ -304,13 +359,23 @@ export const VoiceScreen: React.FC<VoiceScreenProps> = ({ onSOS }) => {
           </button>
         )}
         {(state === 'listening' || state === 'speaking' || state === 'processing') && (
-          <button onClick={stopSession} style={{
-            padding: '20px 48px', borderRadius: '40px', border: '2px solid var(--aec-border)',
-            background: 'white', color: 'var(--aec-text)', fontSize: '18px', fontWeight: 800,
-            cursor: 'pointer', minHeight: '64px'
-          }}>
-            End Conversation
-          </button>
+          <div style={{ display: 'flex', gap: '16px', alignItems: 'center', justifyContent: 'center' }}>
+            <button onClick={toggleMute} style={{
+              width: '64px', height: '64px', borderRadius: '50%', border: '2px solid var(--aec-border)',
+              background: isMuted ? 'rgba(217, 64, 64, 0.1)' : 'white',
+              color: isMuted ? '#D94040' : 'var(--aec-text)',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>
+              {isMuted ? <MicOff size={28} /> : <Mic size={28} />}
+            </button>
+            <button onClick={stopSession} style={{
+              padding: '20px 48px', borderRadius: '40px', border: '2px solid var(--aec-border)',
+              background: 'white', color: 'var(--aec-text)', fontSize: '18px', fontWeight: 800,
+              cursor: 'pointer', minHeight: '64px'
+            }}>
+              End Conversation
+            </button>
+          </div>
         )}
       </div>
 

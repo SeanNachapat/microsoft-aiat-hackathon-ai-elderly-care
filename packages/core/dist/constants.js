@@ -5,11 +5,11 @@ exports.STATUS_COLORS = exports.RISK_LEVELS = exports.WS_BASE_URL = exports.API_
 exports.API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api';
 exports.WS_BASE_URL = process.env.NEXT_PUBLIC_WS_URL || 'http://localhost:4000';
 exports.RISK_LEVELS = {
-    CRITICAL: 'วิกฤต',
-    HIGH: 'เสี่ยงสูง',
-    MEDIUM: 'ปานกลาง',
-    NORMAL: 'ปกติ',
-    LOW: 'ต่ำ'
+    CRITICAL: 'Critical',
+    HIGH: 'High',
+    MEDIUM: 'Medium',
+    NORMAL: 'Normal',
+    LOW: 'Low'
 };
 exports.STATUS_COLORS = {
     CRITICAL: 'bg-red-500',
