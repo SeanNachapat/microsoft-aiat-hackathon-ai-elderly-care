@@ -1,4 +1,4 @@
-export type RiskLevel = 'วิกฤต' | 'เสี่ยงสูง' | 'ปกติ' | 'ต่ำ' | 'ปานกลาง';
+export type RiskLevel = 'Critical' | 'High' | 'Medium' | 'Normal' | 'Low';
 export type AlertSeverity = 'critical' | 'warning' | 'info';
 export type AlertStatus = 'active' | 'acknowledged' | 'resolved';
 export interface Vitals {

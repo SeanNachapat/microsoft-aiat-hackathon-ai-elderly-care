@@ -1,8 +1,6 @@
 import React from 'react';
 interface HeroBannerProps {
-    titleTh: string;
     titleEn: string;
-    subtitleTh: string;
     subtitleEn: string;
     color?: string;
 }

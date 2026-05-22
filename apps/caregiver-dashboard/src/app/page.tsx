@@ -1,80 +1,201 @@
 "use client";
 
-import React from 'react';
-import { Card, Button, StatusBadge, AppTypography, PatientAvatar, MOCK_DATA } from '@healthcare/core';
-import { Search, AlertCircle, TrendingUp, MoreVertical } from 'lucide-react';
+import React, { useState } from 'react';
+import { Card, StatusBadge, AppTypography, PatientAvatar, MOCK_DATA } from '@healthcare/core';
+import { Search, Bell, ChevronDown, Users, AlertTriangle, CheckCircle, Wifi, MoreHorizontal, ChevronRight } from 'lucide-react';
 
 export default function CaregiverDashboard() {
   const patients = MOCK_DATA.allPatients;
   const alerts = MOCK_DATA.alerts;
-  const system = MOCK_DATA.systemHealth;
+
+  // Screenshot stats: Total 128, At Risk 12, Normal 98, Offline 18.
+  const summaryStats = {
+    total: 128,
+    atRisk: 12,
+    normal: 98,
+    offline: 18
+  };
 
   return (
-    <div className="caregiver-dashboard" style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+    <div className="caregiver-dashboard" style={{ 
+      display: 'flex', flexDirection: 'column', gap: '32px', 
+      background: '#FFFFFF', padding: '40px', minHeight: '100vh',
+      color: '#0F172A'
+    }}>
       
       {/* Top Action Bar */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <AppTypography variant="h1" style={{ color: 'var(--aec-green)' }}>
-            Patient Monitoring
-          </AppTypography>
-          <AppTypography variant="body" style={{ opacity: 0.6 }}>
-            Viewing {patients.length} active seniors in Facility A
-          </AppTypography>
-        </div>
-        <div style={{ display: 'flex', gap: '16px' }}>
+        <AppTypography variant="h1" style={{ fontSize: '24px', fontWeight: 700 }}>
+          Residents Overview
+        </AppTypography>
+        
+        <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
           <div style={{ position: 'relative' }}>
-            <Search style={{ position: 'absolute', left: '12px', top: '12px', opacity: 0.4 }} size={20} />
+            <Search style={{ position: 'absolute', left: '12px', top: '10px', color: '#94A3B8' }} size={20} />
             <input 
               type="text" 
-              placeholder="Search patients..." 
+              placeholder="Search resident.." 
               style={{ 
-                padding: '12px 12px 12px 40px', borderRadius: 'var(--radius)', 
-                border: '1px solid var(--aec-border)', background: 'var(--aec-surface)',
-                outline: 'none', width: '300px'
+                padding: '10px 12px 10px 40px', borderRadius: '24px', 
+                border: '1px solid #E2E8F0', background: 'white',
+                outline: 'none', width: '280px', fontSize: '14px'
               }} 
             />
           </div>
-          <Button variant="primary" size="md">
-            + New Assessment
-          </Button>
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '10px 16px', background: 'white', borderRadius: '24px', border: '1px solid #E2E8F0', cursor: 'pointer' }}>
+            <span style={{ fontSize: '14px', fontWeight: 500 }}>All Status</span>
+            <ChevronDown size={16} color="#64748B" />
+          </div>
+
+          <div style={{ position: 'relative', cursor: 'pointer', flexShrink: 0 }}>
+            <Bell size={24} color="#64748B" />
+            <div style={{ 
+              position: 'absolute', top: '-4px', right: '-4px', 
+              background: '#EF4444', color: 'white', fontSize: '10px', 
+              fontWeight: 'bold', width: '16px', height: '16px', 
+              borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center'
+            }}>3</div>
+          </div>
+
         </div>
       </div>
 
-      {/* Main Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '32px' }}>
-        
-        {/* Patient Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
-           {patients.map((p) => (
-             <PatientMonitorCard key={p.id} name={p.name} status={p.status} hr={p.hr} o2={p.o2} lastActive="5m ago" />
-           ))}
-        </div>
+      {/* Summary Cards Row */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+        <SummaryCard title="Total Residents" value={summaryStats.total} icon={<Users size={24} color="#10B981" />} iconBg="#D1FAE5" />
+        <SummaryCard title="At Risk" value={summaryStats.atRisk} icon={<AlertTriangle size={24} color="#EF4444" />} iconBg="#FEE2E2" />
+        <SummaryCard title="Normal" value={summaryStats.normal} icon={<CheckCircle size={24} color="#10B981" />} iconBg="#D1FAE5" />
+        <SummaryCard title="Offline" value={summaryStats.offline} icon={<Wifi size={24} color="#64748B" />} iconBg="#F1F5F9" />
+      </div>
 
-        {/* Right Sidebar: Active Alerts */}
+      {/* Main Grid: List (left) & Sidebar (right) */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 320px', gap: '24px' }}>
+        
+        {/* Left Column: Residents List */}
+        <Card style={{ padding: '24px', background: 'white', borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h2 style={{ fontSize: '18px', fontWeight: 700, margin: 0 }}>Residents</h2>
+          </div>
+
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ color: '#64748B', fontSize: '13px', fontWeight: 600, borderBottom: '1px solid #F1F5F9' }}>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '25%' }}>Name</th>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '15%' }}>Status</th>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '20%' }}>Heart Rate</th>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '15%' }}>Activity</th>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '15%' }}>Last Update</th>
+                <th style={{ padding: '12px 16px', fontWeight: 600, width: '10%', textAlign: 'center' }}></th>
+              </tr>
+            </thead>
+            <tbody>
+              {patients.map((p, index) => {
+                const isRisk = p.status === 'critical' || p.status === 'warning';
+                // Mock activity/time to match screenshot data feel
+                const steps = [1245, 4256, 3842, 532, 5168, 2341][index % 6];
+                const time = ['10:24 AM', '10:24 AM', '10:23 AM', '10:22 AM', '10:21 AM', '10:15 AM'][index % 6];
+                
+                return (
+                  <tr key={p.id} style={{ borderBottom: '1px solid #F8FAFC' }}>
+                    <td style={{ padding: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <div style={{ flexShrink: 0 }}><PatientAvatar name={p.name} size="sm" /></div>
+                        <span style={{ fontWeight: 600, fontSize: '14px', whiteSpace: 'nowrap' }}>{p.name}</span>
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px' }}>
+                      <div style={{ 
+                        display: 'inline-flex', padding: '4px 12px', borderRadius: '12px', fontSize: '12px', fontWeight: 600,
+                        background: isRisk ? '#FEE2E2' : '#D1FAE5',
+                        color: isRisk ? '#EF4444' : '#10B981',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        {isRisk ? 'At Risk' : 'Normal'}
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: 600, whiteSpace: 'nowrap' }}>{p.hr} bpm</span>
+                        <div style={{ flexShrink: 0 }}><Sparkline isRisk={isRisk} /></div>
+                      </div>
+                    </td>
+                    <td style={{ padding: '16px', fontSize: '14px', color: '#475569', whiteSpace: 'nowrap' }}>
+                      {steps} steps
+                    </td>
+                    <td style={{ padding: '16px', fontSize: '14px', color: '#475569', whiteSpace: 'nowrap' }}>
+                      {time}
+                    </td>
+                    <td style={{ padding: '16px', textAlign: 'center' }}>
+                      {isRisk ? (
+                        <div style={{ background: '#FEE2E2', padding: '6px', borderRadius: '6px', display: 'inline-flex' }}>
+                           <AlertTriangle size={18} color="#EF4444" />
+                        </div>
+                      ) : (
+                        <MoreHorizontal size={20} color="#94A3B8" style={{ cursor: 'pointer' }} />
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '24px' }}>
+            <span style={{ color: '#10B981', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+              View all residents <ChevronRight size={16} />
+            </span>
+          </div>
+        </Card>
+
+        {/* Right Sidebar */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          <Card style={{ padding: '24px' }}>
-            <AppTypography variant="h2" style={{ marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <AlertCircle color="var(--aec-alert)" /> Active Alerts
-            </AppTypography>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-               {alerts.map((a) => (
-                 <AlertItem key={a.id} name={a.patientName} alert={a.type} time={a.time} />
-               ))}
+          
+          {/* Risk Distribution Donut Chart */}
+          <Card style={{ padding: '24px', background: 'white', borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+            <h3 style={{ fontSize: '16px', fontWeight: 700, margin: '0 0 24px 0' }}>Risk Distribution</h3>
+            
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <div style={{ position: 'relative', width: '120px', height: '120px' }}>
+                <svg width="120" height="120" viewBox="0 0 120 120" style={{ transform: 'rotate(-90deg)' }}>
+                  <circle cx="60" cy="60" r="40" fill="transparent" stroke="#10B981" strokeWidth="20" strokeDasharray="187 64" />
+                  <circle cx="60" cy="60" r="40" fill="transparent" stroke="#EF4444" strokeWidth="20" strokeDasharray="19 232" strokeDashoffset="-191" />
+                  <circle cx="60" cy="60" r="40" fill="transparent" stroke="#CBD5E1" strokeWidth="20" strokeDasharray="32 219" strokeDashoffset="-214" />
+                </svg>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <LegendItem color="#10B981" label="Normal" value="76.6%" />
+                <LegendItem color="#EF4444" label="At Risk" value="9.4%" />
+                <LegendItem color="#CBD5E1" label="Offline" value="14.0%" />
+              </div>
             </div>
           </Card>
 
-          <Card style={{ padding: '24px' }}>
-            <AppTypography variant="h2" style={{ marginBottom: '20px' }}>
-              System Health
-            </AppTypography>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <AppTypography variant="caps">Network</AppTypography>
-              <StatusBadge status={system.network as any} />
+          {/* Recent Alerts */}
+          <Card style={{ padding: '24px', background: 'white', borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+              <h3 style={{ fontSize: '16px', fontWeight: 700, margin: 0 }}>Recent Alerts</h3>
+              <span style={{ color: '#10B981', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}>View all</span>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <AppTypography variant="caps">AI Models</AppTypography>
-              <StatusBadge status={system.aiModels as any} />
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {alerts.map((a, i) => (
+                <div key={a.id} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                  <div style={{ 
+                    background: a.severity === 'critical' ? '#FEE2E2' : '#FEF3C7', 
+                    padding: '10px', borderRadius: '50%', flexShrink: 0, width: '40px', height: '40px',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                  }}>
+                    <AlertTriangle size={20} color={a.severity === 'critical' ? '#EF4444' : '#F59E0B'} />
+                  </div>
+                  <div>
+                    <h4 style={{ margin: '0 0 4px 0', fontSize: '14px', fontWeight: 600 }}>{a.type}</h4>
+                    <p style={{ margin: 0, fontSize: '13px', color: '#64748B' }}>
+                      {a.patientName} • {a.time}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           </Card>
         </div>
@@ -84,52 +205,35 @@ export default function CaregiverDashboard() {
   );
 }
 
-const PatientMonitorCard = ({ name, status, hr, o2, lastActive }: any) => (
-  <Card style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-        <PatientAvatar name={name} size="md" />
-        <div>
-          <AppTypography variant="h2" style={{ fontSize: '18px' }}>{name}</AppTypography>
-          <AppTypography variant="caps" style={{ fontSize: '10px' }}>Last: {lastActive}</AppTypography>
-        </div>
+const SummaryCard = ({ title, value, icon, iconBg }: { title: string, value: number, icon: React.ReactNode, iconBg: string }) => (
+  <Card style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '16px', background: 'white', borderRadius: '16px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.05)' }}>
+    <AppTypography variant="body" style={{ color: '#64748B', fontSize: '14px', fontWeight: 600 }}>{title}</AppTypography>
+    <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+      <div style={{ width: '48px', height: '48px', borderRadius: '50%', background: iconBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        {icon}
       </div>
-      <StatusBadge status={status} />
+      <span style={{ fontSize: '32px', fontWeight: 700 }}>{value}</span>
     </div>
-
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-      <div style={{ background: 'var(--aec-bg)', padding: '12px', borderRadius: 'var(--radius-sm)' }}>
-        <AppTypography variant="caps" style={{ fontSize: '9px' }}>Heart Rate</AppTypography>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-          <AppTypography variant="h2" style={{ fontSize: '20px', color: status === 'critical' ? 'var(--aec-alert)' : 'inherit' }}>{hr}</AppTypography>
-          <AppTypography variant="caps" style={{ fontSize: '10px' }}>BPM</AppTypography>
-        </div>
-      </div>
-      <div style={{ background: 'var(--aec-bg)', padding: '12px', borderRadius: 'var(--radius-sm)' }}>
-        <AppTypography variant="caps" style={{ fontSize: '9px' }}>SpO2</AppTypography>
-        <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
-          <AppTypography variant="h2" style={{ fontSize: '20px' }}>{o2}</AppTypography>
-          <AppTypography variant="caps" style={{ fontSize: '10px' }}>%</AppTypography>
-        </div>
-      </div>
-    </div>
-
-    <Button variant="secondary" size="sm" style={{ width: '100%', justifyContent: 'space-between' }}>
-      View Full Profile <ChevronRight size={16} />
-    </Button>
   </Card>
 );
 
-const AlertItem = ({ name, alert, time }: any) => (
-  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'rgba(217, 64, 64, 0.05)', borderRadius: 'var(--radius-sm)', borderLeft: '4px solid var(--aec-alert)' }}>
-    <div>
-      <AppTypography variant="h2" style={{ fontSize: '14px' }}>{name}</AppTypography>
-      <AppTypography variant="body" style={{ fontSize: '12px', opacity: 0.7 }}>{alert}</AppTypography>
-    </div>
-    <AppTypography variant="caps" style={{ fontSize: '10px' }}>{time}</AppTypography>
-  </div>
+const Sparkline = ({ isRisk }: { isRisk: boolean }) => (
+  <svg width="40" height="16" viewBox="0 0 40 16">
+    <path 
+      d={isRisk ? "M0,8 L10,8 L15,2 L20,14 L25,8 L40,8" : "M0,8 L10,8 L15,5 L20,10 L25,8 L40,8"} 
+      fill="none" 
+      stroke={isRisk ? "#EF4444" : "#10B981"} 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+    />
+  </svg>
 );
 
-const ChevronRight = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+const LegendItem = ({ color, label, value }: { color: string, label: string, value: string }) => (
+  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+    <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: color }} />
+    <span style={{ fontSize: '13px', color: '#475569', width: '60px' }}>{label}</span>
+    <span style={{ fontSize: '13px', fontWeight: 600 }}>{value}</span>
+  </div>
 );

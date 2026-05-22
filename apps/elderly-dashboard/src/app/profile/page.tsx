@@ -3,9 +3,14 @@
 import React from 'react';
 import { Card, AppTypography, PatientAvatar, MOCK_DATA } from '@healthcare/core';
 import { Phone, Shield, Cpu, Settings, ChevronRight, LogOut } from 'lucide-react';
+import elderInfo from '../../data/elderInfo.json';
 
 export default function ProfilePage() {
   const patient = MOCK_DATA.primaryPatient;
+  const elderName = elderInfo.name;
+  const preferredName = elderInfo.preferredName || elderInfo.name;
+  const age = elderInfo.age;
+  const id = elderInfo.patientId;
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
@@ -13,18 +18,18 @@ export default function ProfilePage() {
       {/* 1. Profile Header */}
       <header style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '20px', textAlign: 'center', paddingTop: '20px' }}>
         <div style={{ position: 'relative' }}>
-          <PatientAvatar name={patient.name} size="lg" />
+          <PatientAvatar name={elderName} size="lg" />
           <div style={{ position: 'absolute', bottom: '4px', right: '4px', width: '24px', height: '24px', borderRadius: '50%', backgroundColor: 'var(--aec-success)', border: '4px solid var(--aec-bg)' }} />
         </div>
         <div>
-          <AppTypography variant="h1" style={{ fontSize: '32px', fontWeight: 900 }}>{patient.fullName}</AppTypography>
-          <AppTypography variant="body" style={{ color: 'var(--aec-text-muted)', fontWeight: 700 }}>AEC Member ID: {patient.id}</AppTypography>
+          <AppTypography variant="h1" style={{ fontSize: '32px', fontWeight: 900 }}>{preferredName}</AppTypography>
+          <AppTypography variant="body" style={{ color: 'var(--aec-text-muted)', fontWeight: 700 }}>AEC Member ID: {id}</AppTypography>
         </div>
       </header>
 
       {/* 2. Personal Info Stats */}
       <div style={{ display: 'flex', gap: '12px' }}>
-        <InfoBadge label="Age" value={patient.age.toString()} />
+        <InfoBadge label="Age" value={age.toString()} />
         <InfoBadge label="Blood" value={patient.bloodType} />
         <InfoBadge label="Weight" value={patient.weight} />
       </div>

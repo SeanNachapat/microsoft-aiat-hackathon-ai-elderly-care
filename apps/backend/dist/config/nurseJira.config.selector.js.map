@@ -1,0 +1,1 @@
+{"version":3,"file":"nurseJira.config.selector.js","sourceRoot":"","sources":["../../src/config/nurseJira.config.selector.ts"],"names":[],"mappings":";;AAMA,gDAMC;AAZD,+DAA0D;AAC1D,+DAA0D;AAK1D,SAAgB,kBAAkB,CAAC,IAAuB;IACxD,QAAQ,IAAI,EAAE,CAAC;QACb,KAAK,IAAI,CAAC,CAAC,OAAO,uCAAiB,CAAC;QACpC,KAAK,IAAI,CAAC;QACV,OAAO,CAAC,CAAG,OAAO,uCAAiB,CAAC;IACtC,CAAC;AACH,CAAC"}

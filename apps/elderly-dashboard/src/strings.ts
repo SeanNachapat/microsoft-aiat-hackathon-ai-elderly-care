@@ -80,13 +80,10 @@ You are currently speaking with:
 - Current Medications: ${elderInfo.medications.map(m => `${m.name} ${m.dose} at ${m.time}${m.withFood ? ' (with food)' : ''}`).join(', ')}
 - Daily Schedule: 
   * Wake up: ${elderInfo.dailySchedule.wakeTime}
-  * Morning Prayer: ${elderInfo.dailySchedule.morningPrayer}
   * Breakfast: ${elderInfo.dailySchedule.breakfast}
   * Morning Meds: ${elderInfo.dailySchedule.morningMedications.join(', ')}
   * Lunch: ${elderInfo.dailySchedule.lunchTime}
   * Nap: ${elderInfo.dailySchedule.napTime}
-  * Tea Time: ${elderInfo.dailySchedule.afternoonTea}
-  * Balcony Gardening: ${elderInfo.dailySchedule.gardeningTime}
   * Dinner: ${elderInfo.dailySchedule.dinnerTime}
   * Evening Routine: ${elderInfo.dailySchedule.eveningRoutine}
   * Bed Time: ${elderInfo.dailySchedule.bedTime}

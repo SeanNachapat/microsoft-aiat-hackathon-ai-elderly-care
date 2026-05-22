@@ -38,6 +38,7 @@ export interface ElderProfile {
   familyCalledRecently?: boolean;
   familyLastContactHoursAgo?: number;
   lastSessionMood?: 'calm' | 'content' | 'lonely' | 'anxious' | 'sad' | 'distressed' | 'unknown';
+  lastSessionLanguage?: 'en' | 'th';
   lastSessionSummary?: string;
   dailySchedule?: any; // Added for completeness based on earlier implementation
   personality?: any; // Added for completeness based on earlier implementation

@@ -71,17 +71,24 @@ export const AppTypography: React.FC<{ variant: 'h1' | 'h2' | 'body' | 'caps' | 
 };
 
 // AEC Patient Avatar
-export const PatientAvatar: React.FC<{ name: string; size?: 'sm' | 'md' | 'lg' }> = ({ name, size = 'md' }) => {
-  const initial = name.charAt(0);
+export const PatientAvatar: React.FC<{ name: string; size?: 'sm' | 'md' | 'lg'; imageUrl?: string }> = ({ name, size = 'md', imageUrl }) => {
   const sizeMap = { sm: '40px', md: '56px', lg: '80px' };
+  const defaultUrl = "/avatar-elderly.png";
+
   return (
     <div style={{ 
       width: sizeMap[size], height: sizeMap[size], borderRadius: '50%', 
       background: 'var(--aec-green)', color: 'white', 
       display: 'flex', alignItems: 'center', justifyContent: 'center', 
-      fontWeight: 800, fontSize: size === 'lg' ? '2em' : '1.2em'
+      fontWeight: 800, fontSize: size === 'lg' ? '2em' : '1.2em',
+      overflow: 'hidden',
+      border: '2px solid white'
     }} className="aec-shadow">
-      {initial}
+      <img 
+        src={imageUrl || defaultUrl} 
+        alt={name} 
+        style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+      />
     </div>
   );
 };

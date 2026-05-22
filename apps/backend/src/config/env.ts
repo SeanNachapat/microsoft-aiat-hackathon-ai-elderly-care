@@ -26,6 +26,8 @@ const envSchema = z.object({
   AZURE_OPENAI_ENDPOINT: z.string().url().optional(),
   AZURE_OPENAI_API_KEY: z.string().optional(),
   AZURE_OPENAI_DEPLOYMENT: z.string().optional(),
+  LINE_CHANNEL_ACCESS_TOKEN: z.string().optional(),
+  LINE_CAREGIVER_USER_ID: z.string().optional(),
 });
 
 const parsed = envSchema.safeParse(process.env);

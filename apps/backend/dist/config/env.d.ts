@@ -11,5 +11,7 @@ export declare const env: {
     AZURE_OPENAI_ENDPOINT?: string | undefined;
     AZURE_OPENAI_API_KEY?: string | undefined;
     AZURE_OPENAI_DEPLOYMENT?: string | undefined;
+    LINE_CHANNEL_ACCESS_TOKEN?: string | undefined;
+    LINE_CAREGIVER_USER_ID?: string | undefined;
 };
 //# sourceMappingURL=env.d.ts.map

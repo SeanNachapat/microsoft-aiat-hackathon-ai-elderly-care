@@ -16,9 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="antialiased theme-caregiver">
-        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: 'var(--aec-bg)' }}>
+        <div style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#FFFFFF' }}>
           <Sidebar role="caregiver" />
-          <main style={{ flex: 1, padding: '40px', overflowY: 'auto' }}>
+          <main style={{ flex: 1, overflowY: 'auto' }}>
             {children}
           </main>
         </div>
